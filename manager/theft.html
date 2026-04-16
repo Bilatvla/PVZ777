@@ -1,75 +1,150 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Кража — Портал ПВЗ</title>
-
-  <!-- STYLES -->
-  <link rel="stylesheet" href="../assets/css/style.css" />
-  <link rel="stylesheet" href="../assets/css/pages.css" />
-
-  <!-- SCRIPTS -->
-  <script defer src="../assets/js/auth.js"></script>
-  <script defer src="../assets/js/navigation.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Видеоинструкции</title>
+  <style>
+    :root{
+      --bg:#07111f;
+      --bg2:#0b1830;
+      --panel:rgba(10,19,36,.94);
+      --panel2:rgba(12,24,48,.98);
+      --text:#e8f0ff;
+      --muted:#9fb0d0;
+      --line:rgba(126,163,255,.18);
+      --accent:#5cc8ff;
+      --accent2:#6dd3ff;
+      --shadow:0 18px 50px rgba(0,0,0,.35);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      color:var(--text);
+      font:16px/1.5 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:
+        radial-gradient(900px 500px at -5% 10%, rgba(31,127,255,.20), transparent 55%),
+        radial-gradient(900px 500px at 105% 80%, rgba(92,200,255,.18), transparent 55%),
+        linear-gradient(180deg, #06101c 0%, #081224 45%, #07101b 100%);
+      min-height:100vh;
+    }
+    body.modal-open{overflow:hidden}
+    .page{max-width:1600px;margin:0 auto;padding:18px}
+    .shell{display:grid;grid-template-columns:340px 1fr;gap:18px;align-items:start}
+    .side,.main{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+    .side{padding:16px;position:sticky;top:16px}
+    .breadcrumbs{display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:var(--muted);font-size:14px;margin-bottom:10px}
+    .breadcrumbs a{color:var(--text);text-decoration:none}
+    .page-title{margin:0 0 10px;font-size:30px;line-height:1.12}
+    .page-intro{margin:0 0 14px;color:var(--muted)}
+    .actions{display:flex;flex-wrap:wrap;gap:10px}
+    .mini-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 16px;border-radius:16px;background:#12213d;border:1px solid rgba(126,163,255,.18);color:var(--text);text-decoration:none;font-weight:700}
+    .main{padding:16px}
+    .content-stack{display:grid;gap:16px}
+    .content-block{border:1px solid rgba(126,163,255,.16);border-radius:20px;padding:16px;background:rgba(255,255,255,.02)}
+    .block-header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}
+    .block-index{color:var(--muted);font-size:13px;margin-bottom:6px}
+    .content-block h2{margin:0;font-size:24px;line-height:1.15}
+    .video-caption{font-size:14px;color:var(--muted);margin-bottom:10px}
+    .video-shell,.embed-shell,.external-video-card{background:#08111f;border:1px solid rgba(126,163,255,.12);border-radius:18px;overflow:hidden}
+    .video-shell video,.video-shell iframe,.embed-shell iframe{display:block;width:100%;aspect-ratio:16/9;border:0;background:#000}
+    .embed-shell iframe{min-height:420px}
+    .external-video-card{padding:24px}
+    .external-video-title{font-size:18px;font-weight:700;margin-bottom:8px}
+    .open-link-btn,.pdf-link{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:12px 16px;border-radius:14px;background:#12213d;border:1px solid rgba(126,163,255,.18);color:var(--text);text-decoration:none;font-weight:700}
+    .instruction-box{margin-top:14px;padding:16px 18px;border-radius:18px;background:rgba(8,17,31,.56);border:1px solid rgba(126,163,255,.12)}
+    .media-section{margin-top:16px}
+    .section-mini-title{font-size:14px;font-weight:700;color:var(--muted);margin-bottom:10px}
+    .image-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .image-card{padding:0;border:0;background:#08111f;border-radius:18px;overflow:hidden;cursor:pointer;display:block}
+    .image-card img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#0a1120}
+    .pdf-list{display:flex;flex-wrap:wrap;gap:10px}
+    .empty-card{padding:20px;border-radius:18px;background:#08111f;border:1px dashed rgba(126,163,255,.18);color:var(--muted)}
+    .image-modal{position:fixed;inset:0;background:rgba(2,7,16,.84);display:none;align-items:center;justify-content:center;padding:22px;z-index:9999}
+    .image-modal.is-open{display:flex}
+    .image-modal-box{position:relative;max-width:min(96vw,1500px);max-height:92vh;width:100%;display:flex;align-items:center;justify-content:center}
+    .image-modal img{max-width:100%;max-height:92vh;border-radius:18px;background:#091221}
+    .image-close{position:absolute;top:-10px;right:-10px;min-width:44px;min-height:44px;border:0;border-radius:999px;background:#12213d;color:#fff;font-size:26px;cursor:pointer}
+    @media (max-width:1100px){
+      .shell{grid-template-columns:1fr}
+      .side{position:static}
+      .page-title{font-size:24px}
+    }
+    @media (max-width:700px){
+      .page{padding:12px}
+      .side,.main{border-radius:18px}
+      .content-block h2{font-size:22px}
+      .image-grid{grid-template-columns:1fr}
+      .embed-shell iframe{min-height:260px}
+    }
+  </style>
 </head>
 <body>
-  <!-- HEADER -->
-  <header class="site-header">
-    <div class="header-shell">
-      <div class="brand">
-        <div class="brand-mark"></div>
-        <div>
-          <div class="brand-title">PVZ Portal</div>
-          <div class="brand-subtitle">Внутренний портал</div>
+  <div class="page">
+    <div class="shell">
+      <aside class="side">
+        <nav class="breadcrumbs">
+          <a href="../home.html">Главная</a>
+          <span>/</span>
+          <a href="./index.html">Сотрудники</a>
+          <span>/</span>
+          <span>Видеоинструкции</span>
+        </nav>
+        <h1 class="page-title">Видеоинструкции</h1>
+        <p class="page-intro">Ниже собраны видеоматериалы, инструкции и дополнительные файлы.</p>
+        <div class="actions">
+          <a class="mini-btn" href="./index.html">← Назад</a>
+          <a class="mini-btn" href="../home.html">⌂ На главную</a>
         </div>
-      </div>
-      <div class="header-actions">
-        <button class="btn btn-ghost" onclick="logout()">Выйти</button>
-      </div>
-    </div>
-  </header>
+      </aside>
 
-  <main class="page">
-    <section class="hero">
-      <div class="hero-bg hero-bg-1"></div>
-      <div class="hero-bg hero-bg-2"></div>
+      <main class="main">
+        <div class="content-stack">
+          
+        <section class="content-block">
+          <div class="block-header">
+            <div>
+              <div class="block-index">Блок 1</div>
+              <h2>Действия при выявлении кражи</h2>
+            </div>
+          </div>
 
-      <div class="hero-inner">
-        <!-- NAVIGATION -->
-        <nav class="breadcrumb" aria-label="Навигация"><a class="crumb" href="../home.html">Главная</a><span class="dot">•</span><a class="crumb" href="../manager/index.html">Управляющие</a><span class="dot">•</span><a class="crumb" href="standards-work.html">Стандарты и работы</a><span class="dot">•</span><a class="crumb" href="personnel.html">Персонал</a><span class="dot">•</span><span class="crumb current">Кража</span></nav>
+          <div class="video-caption">Видео</div>
+          <div class="empty-card">Добавьте внешнюю ссылку на видео.</div>
 
-        <!-- PAGE TITLE -->
-        <div class="hero-copy">
-          <div class="eyebrow">Раздел управляющих</div>
-          <h1>Кража</h1>
-          <p class="lead">Раздел по действиям при краже.</p>
-          <div class="hero-meta">Шаблонная страница раздела</div>
-        </div>
+          <div class="instruction-box">
+            📋 Инструкция: Действия при выявлении кражи (ПВЗ)<br>1. Фиксация факта кражи<br>•	При обнаружении кражи: <br>o	фиксируется факт <br>o	определяется сотрудник, связанный с ситуацией <br>________________________________________<br>2. Работа с сотрудником<br>1.	Вызвать сотрудника <br>2.	Провести разговор: <br>o	выяснить причины <br>o	получить объяснения <br>Варианты:<br>•	✅ Сотрудник идёт на контакт → попытка мирного урегулирования <br>•	❌ Сотрудник не идёт на контакт → переход к следующему этапу <br>________________________________________<br>3. Сбор доказательств<br>Если ситуация не урегулирована:<br>1.	Собрать полный перечень украденного: <br>o	по всем ПВЗ (WB / Ozon / Яндекс) <br>2.	Подготовить: <br>o	список товаров <br>o	стоимость <br>o	данные по удержаниям <br>📌 Важно:<br>•	Если ПВЗ мультибрендовый — собрать по всем системам <br>________________________________________<br>4. Уведомление сотрудника<br>•	Сообщить сотруднику: <br>o	что будет подано заявление в полицию <br>o	если он не явится для мирного урегулирования <br>________________________________________<br>5. Подготовка материалов<br>Если сотрудник не выходит на контакт:<br>Видео:<br>•	Сделать видеонарезку с камер <br>Документы:<br>•	Перечень украденных товаров <br>•	Документ: <br>o	с печатью от ИП, на которого оформлен ПВЗ <br>Дополнительно:<br>•	Доверенность: <br>o	от ИП (у бухгалтера или руководителя) <br>________________________________________<br>6. Подготовка доказательной базы<br>Собрать и распечатать:<br>•	Историю товара: <br>o	факт удержания <br>•	Карточку товара: <br>o	внешний вид <br>•	Стоимость товара <br>•	Скриншоты из системы <br>📌 Всё берётся из рабочей программы<br>________________________________________<br>7. Юридическая база<br>Подготовить:<br>•	Распечатку оферты <br>•	Выделить пункт: <br>o	о материальной ответственности за товар <br>________________________________________<br>8. Обращение в полицию<br>1.	Поехать в участок <br>2.	Иметь при себе: <br>o	доверенность <br>o	перечень украденного <br>o	все доказательства <br>3.	В отделении: <br>o	написать заявление <br>o	дать объяснения <br>________________________________________<br>9. Передача материалов<br>В полицию передаются:<br>•	видеоматериалы <br>•	распечатанные документы <br>•	доказательная база <br>📌 Далее процесс ведут правоохранительные органы<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>Действия при краже (по шагам)<br><br>№	Шаг	Действие	Детали	Ответственный<br>1	Обнаружение	Зафиксировать кражу	Определить сотрудника	Управляющий<br>2	Вызов сотрудника	Провести разговор	Выяснить причины	Управляющий<br>3	Оценка ситуации	Определить сценарий	Идёт на контакт / нет	Управляющий<br>4	Сбор данных	Собрать перечень товаров	По всем ПВЗ (WB/Ozon/Яндекс)	Управляющий<br>5	Уведомление	Предупредить сотрудника	О возможном обращении в полицию	Управляющий<br>6	Видео	Подготовить видеонарезку	С камер наблюдения	Управляющий<br>7	Документы	Подготовить перечень	С печатью ИП	Управляющий<br>8	Доверенность	Получить доверенность	У бухгалтера или руководителя	Управляющий<br>9	Доказательства	Собрать данные по товару	История, карточка, стоимость	Управляющий<br>10	Юридическая база	Подготовить оферту	Пункт о материальной ответственности	Управляющий<br>11	Обращение	Поехать в полицию	С полным пакетом документов	Управляющий<br>12	Заявление	Написать заявление	Дать объяснения	Управляющий<br>13	Передача	Передать материалы	Видео + документы	Полиция<br><br>
+          </div>
 
-        <!-- BACK BUTTONS -->
-        <div class="hero-actions"><a class="btn btn-secondary" href="javascript:history.back()">Назад</a><a class="btn btn-secondary" href="../home.html">На главную</a><button class="btn btn-ghost" onclick="logout()">Выйти</button></div>
-      </div>
-    </section>
-
-    <section class="content-wrap">
-      
-        <!-- PLACEHOLDER -->
-        <section class="surface action-surface">
-          <div class="inline-note">Раздел в разработке</div>
-          <h2>Контент будет добавлен</h2>
-          <p>Эта страница уже создана как отдельный URL. Сюда можно добавить текст, кнопки, инструкции или ссылки на внешние материалы.</p>
+          
+          
         </section>
-        
-    </section>
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-shell">
-      <div>Внутренний портал ПВЗ</div>
-      <div>Статический HTML/CSS/JS</div>
+        </div>
+      </main>
     </div>
-  </footer>
+  </div>
+
+  <div class="image-modal" id="imageModal" onclick="if(event.target===this) closeImageModal()">
+    <div class="image-modal-box">
+      <button class="image-close" type="button" onclick="closeImageModal()">×</button>
+      <img id="modalImage" alt="Увеличенное изображение" />
+    </div>
+  </div>
+
+  <script>
+    function openImageModal(src){
+      document.getElementById('modalImage').src = src;
+      document.getElementById('imageModal').classList.add('is-open');
+      document.body.classList.add('modal-open');
+    }
+    function closeImageModal(){
+      document.getElementById('imageModal').classList.remove('is-open');
+      document.body.classList.remove('modal-open');
+    }
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeImageModal();
+    });
+  </script>
 </body>
 </html>

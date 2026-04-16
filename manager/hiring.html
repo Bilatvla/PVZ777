@@ -1,75 +1,150 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Прием — Портал ПВЗ</title>
-
-  <!-- STYLES -->
-  <link rel="stylesheet" href="../assets/css/style.css" />
-  <link rel="stylesheet" href="../assets/css/pages.css" />
-
-  <!-- SCRIPTS -->
-  <script defer src="../assets/js/auth.js"></script>
-  <script defer src="../assets/js/navigation.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Видеоинструкции</title>
+  <style>
+    :root{
+      --bg:#07111f;
+      --bg2:#0b1830;
+      --panel:rgba(10,19,36,.94);
+      --panel2:rgba(12,24,48,.98);
+      --text:#e8f0ff;
+      --muted:#9fb0d0;
+      --line:rgba(126,163,255,.18);
+      --accent:#5cc8ff;
+      --accent2:#6dd3ff;
+      --shadow:0 18px 50px rgba(0,0,0,.35);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      color:var(--text);
+      font:16px/1.5 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:
+        radial-gradient(900px 500px at -5% 10%, rgba(31,127,255,.20), transparent 55%),
+        radial-gradient(900px 500px at 105% 80%, rgba(92,200,255,.18), transparent 55%),
+        linear-gradient(180deg, #06101c 0%, #081224 45%, #07101b 100%);
+      min-height:100vh;
+    }
+    body.modal-open{overflow:hidden}
+    .page{max-width:1600px;margin:0 auto;padding:18px}
+    .shell{display:grid;grid-template-columns:340px 1fr;gap:18px;align-items:start}
+    .side,.main{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+    .side{padding:16px;position:sticky;top:16px}
+    .breadcrumbs{display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:var(--muted);font-size:14px;margin-bottom:10px}
+    .breadcrumbs a{color:var(--text);text-decoration:none}
+    .page-title{margin:0 0 10px;font-size:30px;line-height:1.12}
+    .page-intro{margin:0 0 14px;color:var(--muted)}
+    .actions{display:flex;flex-wrap:wrap;gap:10px}
+    .mini-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 16px;border-radius:16px;background:#12213d;border:1px solid rgba(126,163,255,.18);color:var(--text);text-decoration:none;font-weight:700}
+    .main{padding:16px}
+    .content-stack{display:grid;gap:16px}
+    .content-block{border:1px solid rgba(126,163,255,.16);border-radius:20px;padding:16px;background:rgba(255,255,255,.02)}
+    .block-header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}
+    .block-index{color:var(--muted);font-size:13px;margin-bottom:6px}
+    .content-block h2{margin:0;font-size:24px;line-height:1.15}
+    .video-caption{font-size:14px;color:var(--muted);margin-bottom:10px}
+    .video-shell,.embed-shell,.external-video-card{background:#08111f;border:1px solid rgba(126,163,255,.12);border-radius:18px;overflow:hidden}
+    .video-shell video,.video-shell iframe,.embed-shell iframe{display:block;width:100%;aspect-ratio:16/9;border:0;background:#000}
+    .embed-shell iframe{min-height:420px}
+    .external-video-card{padding:24px}
+    .external-video-title{font-size:18px;font-weight:700;margin-bottom:8px}
+    .open-link-btn,.pdf-link{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:12px 16px;border-radius:14px;background:#12213d;border:1px solid rgba(126,163,255,.18);color:var(--text);text-decoration:none;font-weight:700}
+    .instruction-box{margin-top:14px;padding:16px 18px;border-radius:18px;background:rgba(8,17,31,.56);border:1px solid rgba(126,163,255,.12)}
+    .media-section{margin-top:16px}
+    .section-mini-title{font-size:14px;font-weight:700;color:var(--muted);margin-bottom:10px}
+    .image-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .image-card{padding:0;border:0;background:#08111f;border-radius:18px;overflow:hidden;cursor:pointer;display:block}
+    .image-card img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#0a1120}
+    .pdf-list{display:flex;flex-wrap:wrap;gap:10px}
+    .empty-card{padding:20px;border-radius:18px;background:#08111f;border:1px dashed rgba(126,163,255,.18);color:var(--muted)}
+    .image-modal{position:fixed;inset:0;background:rgba(2,7,16,.84);display:none;align-items:center;justify-content:center;padding:22px;z-index:9999}
+    .image-modal.is-open{display:flex}
+    .image-modal-box{position:relative;max-width:min(96vw,1500px);max-height:92vh;width:100%;display:flex;align-items:center;justify-content:center}
+    .image-modal img{max-width:100%;max-height:92vh;border-radius:18px;background:#091221}
+    .image-close{position:absolute;top:-10px;right:-10px;min-width:44px;min-height:44px;border:0;border-radius:999px;background:#12213d;color:#fff;font-size:26px;cursor:pointer}
+    @media (max-width:1100px){
+      .shell{grid-template-columns:1fr}
+      .side{position:static}
+      .page-title{font-size:24px}
+    }
+    @media (max-width:700px){
+      .page{padding:12px}
+      .side,.main{border-radius:18px}
+      .content-block h2{font-size:22px}
+      .image-grid{grid-template-columns:1fr}
+      .embed-shell iframe{min-height:260px}
+    }
+  </style>
 </head>
 <body>
-  <!-- HEADER -->
-  <header class="site-header">
-    <div class="header-shell">
-      <div class="brand">
-        <div class="brand-mark"></div>
-        <div>
-          <div class="brand-title">PVZ Portal</div>
-          <div class="brand-subtitle">Внутренний портал</div>
+  <div class="page">
+    <div class="shell">
+      <aside class="side">
+        <nav class="breadcrumbs">
+          <a href="../home.html">Главная</a>
+          <span>/</span>
+          <a href="./index.html">Сотрудники</a>
+          <span>/</span>
+          <span>Видеоинструкции</span>
+        </nav>
+        <h1 class="page-title">Видеоинструкции</h1>
+        <p class="page-intro">Ниже собраны видеоматериалы, инструкции и дополнительные файлы.</p>
+        <div class="actions">
+          <a class="mini-btn" href="./index.html">← Назад</a>
+          <a class="mini-btn" href="../home.html">⌂ На главную</a>
         </div>
-      </div>
-      <div class="header-actions">
-        <button class="btn btn-ghost" onclick="logout()">Выйти</button>
-      </div>
-    </div>
-  </header>
+      </aside>
 
-  <main class="page">
-    <section class="hero">
-      <div class="hero-bg hero-bg-1"></div>
-      <div class="hero-bg hero-bg-2"></div>
+      <main class="main">
+        <div class="content-stack">
+          
+        <section class="content-block">
+          <div class="block-header">
+            <div>
+              <div class="block-index">Блок 1</div>
+              <h2>Приём сотрудника на работу</h2>
+            </div>
+          </div>
 
-      <div class="hero-inner">
-        <!-- NAVIGATION -->
-        <nav class="breadcrumb" aria-label="Навигация"><a class="crumb" href="../home.html">Главная</a><span class="dot">•</span><a class="crumb" href="../manager/index.html">Управляющие</a><span class="dot">•</span><a class="crumb" href="standards-work.html">Стандарты и работы</a><span class="dot">•</span><a class="crumb" href="personnel.html">Персонал</a><span class="dot">•</span><span class="crumb current">Прием</span></nav>
+          <div class="video-caption">Видео</div>
+          <div class="empty-card">Добавьте внешнюю ссылку на видео.</div>
 
-        <!-- PAGE TITLE -->
-        <div class="hero-copy">
-          <div class="eyebrow">Раздел управляющих</div>
-          <h1>Прием</h1>
-          <p class="lead">Раздел по приему сотрудников.</p>
-          <div class="hero-meta">Шаблонная страница раздела</div>
-        </div>
+          <div class="instruction-box">
+            📋 Инструкция: Приём сотрудника на работу (ПВЗ)<br>1. Общие принципы<br>•	Все сотрудники по возможности должны быть официально оформлены <br>•	Допустимые варианты оформления: <br>o	0,25 ставки <br>o	0,5 ставки <br>o	0,75 ставки <br>•	Неофициальные сотрудники допускаются, но их должно быть меньшинство <br>________________________________________<br>2. Сбор документов<br>Обязательные документы:<br>•	Паспорт (2 разворота) <br>•	ИНН <br>•	СНИЛС <br>•	Реквизиты для перевода денежных средств <br>Дополнительно:<br>•	Если сотрудник ранее работал: <br>o	Выписка с Госуслуг (электронная трудовая) <br>________________________________________<br>3. Особые условия по возрасту<br>Если сотруднику 17 лет:<br>•	Требуется: <br>o	Справка 086-У <br>o	Письменное разрешение от родителей <br>Если сотруднику 16 лет:<br>•	Рекомендуется не брать <br>Условия оформления:<br>•	Только на 0,25 ставки <br>________________________________________<br><br><br><br>4. Передача документов в кадры<br>После сбора документов:<br>1.	Сделать фото всех документов <br>2.	Отправить в группу «Кадры» <br>3.	Дополнительно указать: <br>o	Адрес ПВЗ (точка) <br>o	На кого оформляется сотрудник <br>📌 Уточнение:<br>•	На кого оформлять — уточняется у Ирины <br>•	Обычно оформляется: <br>o	на владельца точки <br>o	или на того, на кого уже оформлены ПВЗ<br>________________________________________<br>5. Получение и подписание документов<br>После обработки кадров:<br>1.	Кадры присылают пакет документов <br>2.	Необходимо: <br>o	Распечатать документы <br>o	Подойти к Ирине <br>o	Поставить подписи и печать <br>3.	Поехать к сотруднику: <br>o	Подписать документы <br>________________________________________<br>6. Комплект документов сотрудника<br>Сотруднику передаются:<br>•	Трудовой договор <br>•	Договор материальной ответственности <br>•	Должностная инструкция <br>📌 Важно:<br>•	Один экземпляр остаётся у сотрудника <br>•	Второй экземпляр — у компании <br>________________________________________<br>7. Хранение документов<br>После подписания:<br>1.	Документы возвращаются в офис <br>2.	Передаются Наталии<br>3.	Наталия <br>o	Складывает документы в шкаф/сейф <br>📌 Особенности:<br>•	В данный момент: <br>o	документы хранятся в бумажном виде <br>o	сканирование — не обязательно, но возможно <br>________________________________________<br>8. Электронные копии<br>•	В кадрах уже есть: <br>o	электронные версии документов (без подписей) <br>•	Их можно: <br>o	запросить в любой момент <br>o	получить дубликаты <br>📌 Рекомендация:<br>•	Организовать: <br>o	сканирование <br>o	хранение по папкам <br>________________________________________<br>9. Приём неофициального сотрудника<br>Если сотрудник работает неофициально:<br>Обязательно:<br>•	Паспорт (2 разворота) <br>•	Реквизиты <br>Подписываются:<br>•	Договор материальной ответственности <br>•	Один из договоров: <br>o	агентский <br>o	ГПХ <br>📌 Цель:<br>•	Чтобы при проверке можно было быстро оформить сотрудника <br>________________________________________<br>10. Хранение документов неофициальных сотрудников<br>•	Все документы: <br>o	подписываются <br>o	передаются Наталии <br>o	хранятся аналогично официальным <br>________________________________________<br>📌 Итог процесса (кратко)<br>1.	Собрали документы <br>2.	Отправили в кадры <br>3.	Получили пакет <br>4.	Подписали у Ирины <br>5.	Подписали с сотрудником <br>6.	Передали Наталии на хранение<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>Приём сотрудника на работу (ПВЗ)<br><br>№	Шаг	Действие	Что нужно / детали	Ответственный<br>1	Определение формата	Определить тип оформления	Официальный (приоритет) / неофициальный	Управляющий<br>2	Сбор документов	Собрать базовый пакет	Паспорт (2 разворота), ИНН, СНИЛС, реквизиты	Управляющий<br>3	Доп. документы	Проверить наличие доп. документов	Выписка с Госуслуг (если работал ранее)	Управляющий<br>4	Проверка возраста	Проверить возраст сотрудника	17 лет → справка 086-У + разрешение родителей; 16 лет → не брать	Управляющий<br>5	Фото документов	Сделать фото документов	Все документы должны быть читаемыми	Управляющий<br>6	Передача в кадры	Отправить документы	Отправка в группу «Кадры»	Управляющий<br>7	Указание данных	Указать параметры оформления	Адрес ПВЗ + на кого оформляется сотрудник	Управляющий<br>8	Уточнение оформления	Уточнить на кого оформлять	У Ирины 	Управляющий<br>9	Обработка кадров	Дождаться обработки	Кадры формируют пакет документов	Кадры<br>10	Получение пакета	Получить документы	Готовый пакет от кадров	Управляющий<br>11	Подготовка	Распечатать документы	Подготовить к подписанию	Управляющий<br>12	Подписание внутри	Подписать у Ирины	Подпись + печать	Ирина<br>13	Подписание с сотрудником	Подписать документы с сотрудником	Выезд к сотруднику	Управляющий<br>14	Передача сотруднику	Выдать документы	Договор, мат. ответственность, должностная инструкция	Управляющий<br>15	Хранение копии	Оставить экземпляр	Один экземпляр остается у компании	Управляющий<br>16	Возврат в офис	Вернуть документы	Передать в офис	Управляющий<br>17	Передача на хранение	Передать Софии	Документы передаются на хранение	Наталия<br>18	Хранение	Разместить документы	Шкаф / сейф	Наталия<br>19	Электронные копии	При необходимости сканировать	Необязательно, но желательно	Наталия/ офис<br>20	Доступ к копиям	Получение дубликатов	Через кадры можно запросить	Управляющий<br><br>Неофициальные сотрудники<br><br>№	Шаг	Действие	Что нужно	Ответственный<br>1	Сбор документов	Получить документы	Паспорт (2 разворота), реквизиты	Управляющий<br>2	Подписание	Подписать документы	Договор мат. ответственности	Управляющий<br>3	Альтернативный договор	Подписать доп. договор	Агентский или ГПХ	Управляющий<br>4	Подготовка к проверке	Обеспечить готовность	Возможность быстро оформить при проверке	Управляющий<br>5	Передача	Передать документы	Наталии	Управляющий<br>6	Хранение	Разместить документы	В шкафу / сейфе	Наталия<br><br>
+          </div>
 
-        <!-- BACK BUTTONS -->
-        <div class="hero-actions"><a class="btn btn-secondary" href="javascript:history.back()">Назад</a><a class="btn btn-secondary" href="../home.html">На главную</a><button class="btn btn-ghost" onclick="logout()">Выйти</button></div>
-      </div>
-    </section>
-
-    <section class="content-wrap">
-      
-        <!-- PLACEHOLDER -->
-        <section class="surface action-surface">
-          <div class="inline-note">Раздел в разработке</div>
-          <h2>Контент будет добавлен</h2>
-          <p>Эта страница уже создана как отдельный URL. Сюда можно добавить текст, кнопки, инструкции или ссылки на внешние материалы.</p>
+          
+          
         </section>
-        
-    </section>
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-shell">
-      <div>Внутренний портал ПВЗ</div>
-      <div>Статический HTML/CSS/JS</div>
+        </div>
+      </main>
     </div>
-  </footer>
+  </div>
+
+  <div class="image-modal" id="imageModal" onclick="if(event.target===this) closeImageModal()">
+    <div class="image-modal-box">
+      <button class="image-close" type="button" onclick="closeImageModal()">×</button>
+      <img id="modalImage" alt="Увеличенное изображение" />
+    </div>
+  </div>
+
+  <script>
+    function openImageModal(src){
+      document.getElementById('modalImage').src = src;
+      document.getElementById('imageModal').classList.add('is-open');
+      document.body.classList.add('modal-open');
+    }
+    function closeImageModal(){
+      document.getElementById('imageModal').classList.remove('is-open');
+      document.body.classList.remove('modal-open');
+    }
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeImageModal();
+    });
+  </script>
 </body>
 </html>
