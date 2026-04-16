@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Новая страница</title>
+  <title>Реестр сотрудников</title>
   <style>
     :root{
       --bg:#0b1220;
@@ -123,16 +123,16 @@
       <nav class="breadcrumbs" aria-label="Хлебные крошки">
         <a href="../home.html">Главная</a>
         <span>•</span>
-        <a href="./index.html">HR</a>
+        <a href="./index.html">Сотрудники</a>
         <span>•</span>
-        <span>Новая страница</span>
+        <span>Реестр сотрудников</span>
       </nav>
       <div class="top-row">
-        <h1 class="page-title">Новая страница</h1>
+        <h1 class="page-title">Реестр сотрудников</h1>
         <div class="controls">
           <a class="btn" href="./index.html">← Назад</a>
           <a class="btn" href="../home.html">⌂ На главную</a>
-          <a class="btn secondary" href="https://docs.google.com/spreadsheets/d/19MLw1b_tVqErpjwwrPEy7GAeDs2ALqWhPa64Y0DBOko/edit?gid=0#gid=0" target="_blank" rel="noopener">Открыть отдельно</a>
+          <a class="btn secondary" href="https://docs.google.com/spreadsheets/d/1LwzKvwND4ue2BW-cf3-3l7FvzmCgqNs-nhPwmwrpQwU/edit?usp=sharing" target="_blank" rel="noopener">Открыть отдельно</a>
         </div>
       </div>
     </section>
@@ -141,7 +141,7 @@
       <div class="preview-head">Предпросмотр документа</div>
       <iframe
         class="preview-frame"
-        src="https://docs.google.com/spreadsheets/d/19MLw1b_tVqErpjwwrPEy7GAeDs2ALqWhPa64Y0DBOko/preview"
+        src="https://docs.google.com/spreadsheets/d/1LwzKvwND4ue2BW-cf3-3l7FvzmCgqNs-nhPwmwrpQwU/preview"
         loading="lazy"
         allowfullscreen
         referrerpolicy="no-referrer-when-downgrade">
@@ -149,4 +149,4 @@
     </section>
   </main>
 </body>
-</html>
+</html>ml>

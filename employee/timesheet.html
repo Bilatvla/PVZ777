@@ -1,73 +1,1061 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Табель учета времени — Портал ПВЗ</title>
-  <link rel="stylesheet" href="../assets/css/style.css" />
-  <link rel="stylesheet" href="../assets/css/pages.css" />
-  <script defer src="../assets/js/auth.js"></script>
-  <script defer src="../assets/js/navigation.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Дашборд подразделения</title>
+  <style>
+    :root{
+      --bg:#07111f;
+      --bg2:#0b1830;
+      --panel:rgba(10,19,36,.94);
+      --panel2:rgba(12,24,48,.98);
+      --text:#e8f0ff;
+      --muted:#9fb0d0;
+      --line:rgba(126,163,255,.18);
+      --accent:#5cc8ff;
+      --accent2:#6dd3ff;
+      --btn:#12213d;
+      --shadow:0 18px 50px rgba(0,0,0,.35);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      color:var(--text);
+      font:16px/1.45 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:
+        radial-gradient(900px 500px at -5% 10%, rgba(31,127,255,.20), transparent 55%),
+        radial-gradient(900px 500px at 105% 80%, rgba(92,200,255,.18), transparent 55%),
+        linear-gradient(180deg, #06101c 0%, #081224 45%, #07101b 100%);
+      min-height:100vh;
+    }
+    body.fullscreen-mode{
+      overflow:hidden;
+    }
+    .page{max-width:1600px;margin:0 auto;padding:18px}
+    .shell{display:grid;grid-template-columns:340px 1fr;gap:18px;align-items:start}
+    .side,.main{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+    .side{padding:16px;position:sticky;top:16px}
+    .breadcrumbs{display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:var(--muted);font-size:14px;margin-bottom:10px}
+    .breadcrumbs a{color:var(--text);text-decoration:none}
+    .page-title{margin:0 0 12px;font-size:30px;line-height:1.12}
+    .actions{display:flex;flex-wrap:wrap;gap:10px}
+    .mini-btn,
+    .frame-btn{
+      display:inline-flex;align-items:center;gap:8px;padding:12px 16px;border-radius:16px;
+      background:#12213d;border:1px solid rgba(126,163,255,.18);color:var(--text);
+      text-decoration:none;font-weight:700;cursor:pointer;
+    }
+    .main{padding:12px;overflow:hidden}
+    .frameWrap{
+      border-radius:18px;
+      overflow:hidden;
+      background:#fff;
+      border:1px solid rgba(126,163,255,.12);
+      position:relative;
+    }
+    .frameTop{
+      display:flex;
+      justify-content:flex-end;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      background:#0b1830;
+      border-bottom:1px solid rgba(126,163,255,.12);
+    }
+    .preview-frame{
+      display:block;
+      width:100%;
+      height:72vh;
+      border:0;
+      background:#fff;
+    }
+
+    .frameWrap.is-fullscreen{
+      position:fixed;
+      inset:0;
+      width:100vw;
+      height:100vh;
+      z-index:9999;
+      border-radius:0;
+      border:0;
+      background:#06101c;
+    }
+    .frameWrap.is-fullscreen .frameTop{
+      padding:12px 16px;
+      border-bottom:1px solid rgba(126,163,255,.16);
+    }
+    .frameWrap.is-fullscreen .preview-frame{
+      height:calc(100vh - 58px);
+    }
+
+    @media (max-width: 1100px){
+      .shell{grid-template-columns:1fr}
+      .side{position:static}
+      .page-title{font-size:24px}
+      .preview-frame{height:78vh}
+    }
+    @media (max-width: 640px){
+      .page{padding:12px}
+      .side{padding:14px}
+      .page-title{font-size:22px}
+      .mini-btn,.frame-btn{padding:11px 14px}
+      .preview-frame{height:72vh}
+      .frameWrap.is-fullscreen .preview-frame{
+        height:calc(100vh - 56px);
+      }
+    }
+  </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-shell">
-      <div class="brand">
-        <div class="brand-mark"></div>
-        <div>
-          <div class="brand-title">PVZ Portal</div>
-          <div class="brand-subtitle">Внутренний портал</div>
+  <div class="page">
+    <div class="shell">
+      <aside class="side">
+        <nav class="breadcrumbs">
+          <a href="../home.html">Главная</a>
+          <span>/</span>
+          <a href="./index.html">Сотрудники</a>
+          <span>/</span>
+          <span>Дашборд подразделения</span>
+        </nav>
+        <h1 class="page-title">Дашборд подразделения</h1>
+        <div class="actions">
+          <a class="mini-btn" href="./index.html">← Назад</a>
+          <a class="mini-btn" href="../home.html">⌂ На главную</a>
         </div>
-      </div>
-      <div class="header-actions">
-        <button class="btn btn-ghost" onclick="logout()">Выйти</button>
-      </div>
-    </div>
-  </header>
+      </aside>
 
-  <main class="page">
-    <section class="hero hero-compact">
-      <div class="hero-bg hero-bg-1"></div>
-      <div class="hero-bg hero-bg-2"></div>
-      <div class="hero-inner">
-        <nav class="breadcrumb" aria-label="Навигация"><a class="crumb" href="index.html">Сотрудники</a><span class="dot">•</span><span class="crumb current">Табель учета времени</span></nav>
-        <div class="hero-copy">
-          <div class="eyebrow">Предпросмотр Google-ссылки</div>
-          <h1>Табель учета времени</h1>
-          <p class="lead">На этой странице сразу открывается окно предпросмотра. Для запуска рабочей версии замените две ссылки в коде: одну для preview, вторую для открытия отдельно.</p>
-          <div class="hero-meta">Страница готова для быстрого копирования</div>
-        </div>
-        <div class="hero-actions">
-          <a class="btn btn-secondary btn-small" href="index.html">Назад</a>
-          <a class="btn btn-secondary btn-small" href="../home.html">На главную</a>
-          <button class="btn btn-ghost btn-small" onclick="logout()">Выйти</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="content-wrap">
-      <section class="surface action-surface preview-surface">
-        <div class="preview-toolbar">
-          <div>
-            <div class="inline-note">Предпросмотр</div>
-            <h2 class="preview-title">Окно документа</h2>
-            <p class="preview-subtitle">Вставьте сюда Google preview-ссылку, и документ будет открываться прямо на странице.</p>
+      <main class="main">
+        <div class="frameWrap" id="frameWrap">
+          <div class="frameTop">
+            <button class="frame-btn" id="toggleFullscreenBtn" type="button">Развернуть</button>
           </div>
-          <a class="btn btn-primary btn-small" href="https://docs.google.com/" target="_blank" rel="noopener noreferrer">Открыть отдельно</a>
-        </div>
-        <div class="preview-shell">
-          <iframe class="preview-frame" src="https://docs.google.com/" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
-        </div>
-        <div class="dev-note"><strong>Где менять ссылки:</strong> найдите в коде этой страницы <code>href="https://docs.google.com/"</code> и <code>src="https://docs.google.com/"</code>, затем замените на свои рабочие адреса.</div>
-      </section>
-    </section>
-  </main>
+          <iframe
+            id="dashboardFrame"
+            class="preview-frame"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-popups allow-downloads"
+            srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;ru&quot;&gt;&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1,viewport-fit=cover&quot;&gt;
+  &lt;title&gt;Учёт рабочего времени — календарь&lt;/title&gt;
+  &lt;style&gt;
+    :root{
+      --bg:#0b0f14;
+      --card:#111824;
+      --card2:#0f1621;
+      --text:#e6eefc;
+      --muted:#9bb0cf;
+      --line:#1d2a3a;
+      --accent:#7dd3fc;
 
-  <footer class="site-footer">
-    <div class="footer-shell">
-      <div>Внутренний портал ПВЗ</div>
-      <div>Страница с предпросмотром</div>
+      /* ✅ зелёный для рейтинга */
+      --good:#22c55e;           /* основной зелёный */
+      --goodGlow: rgba(34,197,94,.20);
+
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --r:16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, &quot;Liberation Mono&quot;, &quot;Courier New&quot;, monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, &quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 900px at 10% 0%, rgba(125,211,252,.12), transparent 55%),
+                  radial-gradient(900px 700px at 90% 20%, rgba(34,197,94,.10), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      font-family:var(--sans);
+      -webkit-font-smoothing:antialiased;
+      padding:16px 12px 24px;
+      display:flex;
+      justify-content:center;
+    }
+    .app{
+      width:100%;
+      max-width:420px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    @media (min-width: 860px){
+      body{ padding:24px 24px 32px; }
+      .app{ max-width: 1200px; }
+      .filters{ grid-template-columns: repeat(4, 1fr); } /* было 3, стало 4 */
+      .kpis{ grid-template-columns: repeat(4, 1fr); }
+      .head{ padding:12px 14px; }
+      .gridwrap{ grid-template-columns: 1.15fr .85fr; }
+      .widegrid{ grid-template-columns: 1fr 1fr; }
+    }
+
+    header{
+      position:sticky; top:0; z-index:5;
+      background: linear-gradient(180deg, rgba(11,15,20,.98), rgba(11,15,20,.82));
+      backdrop-filter: blur(10px);
+      padding:10px 0 6px;
+    }
+    .head{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      background: rgba(17,24,36,.75);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+    }
+    .title{ font-size:16px; font-weight:800; letter-spacing:.2px; margin:0; line-height:1.1; }
+    .controls{ display:flex; gap:8px; align-items:center; flex-wrap:nowrap; }
+    @media (min-width: 860px){ .controls{ flex-wrap:wrap; justify-content:flex-end; } }
+
+    button{
+      appearance:none;
+      border:1px solid var(--line);
+      background: rgba(15,22,33,.9);
+      color:var(--text);
+      padding:8px 10px;
+      border-radius: 12px;
+      font-size:12px;
+      font-weight:650;
+      cursor:pointer;
+      transition: transform .06s ease, background .2s ease, border-color .2s ease;
+      white-space:nowrap;
+    }
+    button:hover{ border-color:#2b3d55; background: rgba(17,28,42,.95); }
+    button:active{ transform: translateY(1px); }
+
+    .statusline{ margin-top:6px; font-size:12px; color:var(--muted); padding:0 4px; }
+
+    .card{
+      border:1px solid var(--line);
+      background: rgba(17,24,36,.72);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding:12px;
+    }
+
+    .filters{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    label{ display:block; font-size:11px; color:var(--muted); margin-bottom:6px; }
+    select, input[type=&quot;month&quot;]{
+      width:100%;
+      border:1px solid var(--line);
+      background: rgba(15,22,33,.85);
+      color:var(--text);
+      border-radius: 12px;
+      padding:10px;
+      font-size:12px;
+      outline:none;
+    }
+
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:10px;
+    }
+    @media (min-width: 520px){ .kpis{ grid-template-columns: repeat(4, 1fr); } }
+    .kpi{
+      background: rgba(15,22,33,.65);
+      border:1px solid var(--line);
+      border-radius: 14px;
+      padding:10px;
+      min-height:64px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .kpi .klabel{ font-size:11px; color:var(--muted); line-height:1.1; }
+    .kpi .kval{ font-family:var(--mono); font-size:16px; font-weight:800; letter-spacing:.4px; }
+
+    .gridwrap{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+    }
+
+    /* Calendar */
+    .calhead{
+      display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px;
+    }
+    .calhead .monthname{
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+    .calendar{
+      display:grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap:8px;
+    }
+    .dow{
+      font-size:11px;
+      color:var(--muted);
+      text-align:center;
+      padding:6px 0;
+      border-bottom:1px solid rgba(29,42,58,.6);
+    }
+    .day{
+      border:1px solid rgba(29,42,58,.9);
+      background: rgba(15,22,33,.60);
+      border-radius: 14px;
+      padding:10px;
+      min-height:86px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      position:relative;
+      overflow:hidden;
+    }
+    .day .dnum{
+      font-family:var(--mono);
+      font-size:12px;
+      color:var(--muted);
+    }
+    .day .hours{
+      font-family:var(--mono);
+      font-size:16px;
+      font-weight:900;
+      letter-spacing:.3px;
+      margin-top:6px;
+    }
+    .day .hint{
+      font-size:11px;
+      color:var(--muted);
+      margin-top:6px;
+    }
+    .day.off{
+      opacity:.55;
+      background: rgba(15,22,33,.35);
+    }
+    .day.today{
+      outline: 2px solid rgba(125,211,252,.35);
+      border-color: rgba(125,211,252,.45);
+    }
+    .badge{
+      position:absolute;
+      top:10px;
+      right:10px;
+      font-size:10px;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid rgba(125,211,252,.35);
+      color: rgba(125,211,252,.9);
+      background: rgba(125,211,252,.10);
+      font-family: var(--mono);
+    }
+
+    /* Table */
+    .tablewrap { overflow-x: auto; }
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      font-size:12px;
+      min-width: 660px; /* чуть шире из-за &quot;Адрес&quot; */
+    }
+    thead th{
+      position:sticky;
+      top:0;
+      background: rgba(17,24,36,.92);
+      backdrop-filter: blur(8px);
+      text-align:left;
+      padding:10px 10px;
+      border-bottom:1px solid var(--line);
+      color:var(--muted);
+      font-size:11px;
+      font-weight:700;
+      z-index:2;
+      white-space:nowrap;
+    }
+    tbody td{
+      padding:10px 10px;
+      border-bottom:1px solid rgba(29,42,58,.7);
+      vertical-align:middle;
+      white-space:nowrap;
+    }
+    tbody tr:hover td{ background: rgba(15,22,33,.55); }
+
+    .footnote{ font-size:11px; color:var(--muted); margin-top:8px; line-height:1.4; }
+    .muted{ color:var(--muted); }
+
+    /* ✅ TOP 10 */
+    .top10head{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .top10title{
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+    .top10sub{
+      font-size:11px;
+      color:var(--muted);
+    }
+    .ranklist{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .rankrow{
+      display:grid;
+      grid-template-columns: 34px 1fr 76px;
+      gap:10px;
+      align-items:center;
+    }
+    .ranknum{
+      font-family:var(--mono);
+      font-weight:900;
+      color: rgba(34,197,94,.95);
+      text-shadow: 0 0 18px var(--goodGlow);
+      text-align:right;
+    }
+    .rankmain{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:0;
+    }
+    .rankname{
+      font-size:12px;
+      font-weight:700;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .barwrap{
+      height:10px;
+      border-radius:999px;
+      background: rgba(29,42,58,.65);
+      border:1px solid rgba(29,42,58,.95);
+      overflow:hidden;
+      position:relative;
+    }
+    .bar{
+      height:100%;
+      border-radius:999px;
+      width:0%;
+      background: linear-gradient(90deg, rgba(34,197,94,.95), rgba(34,197,94,.55));
+      box-shadow: 0 0 18px var(--goodGlow);
+    }
+    .rankhrs{
+      font-family:var(--mono);
+      font-weight:900;
+      text-align:right;
+      color: rgba(34,197,94,.92);
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+  &lt;div class=&quot;app&quot;&gt;
+    &lt;header&gt;
+      &lt;div class=&quot;head&quot;&gt;
+        &lt;h1 class=&quot;title&quot; id=&quot;companyName&quot;&gt;Учёт рабочего времени&lt;/h1&gt;
+        &lt;div class=&quot;controls&quot;&gt;
+          &lt;button id=&quot;btnBackTop&quot; title=&quot;На главную&quot;&gt;←&lt;/button&gt;
+          &lt;button id=&quot;btnRefresh&quot; title=&quot;Перезагрузить данные&quot;&gt;Обновить&lt;/button&gt;
+          &lt;button id=&quot;btnReset&quot; title=&quot;Сбросить фильтры&quot;&gt;Сбросить&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;statusline&quot; id=&quot;loadStatus&quot;&gt;Готов к загрузке…&lt;/div&gt;
+    &lt;/header&gt;
+
+    &lt;section class=&quot;card&quot; aria-label=&quot;Фильтры&quot;&gt;
+      &lt;div class=&quot;filters&quot;&gt;
+        &lt;div&gt;
+          &lt;label&gt;Сотрудник&lt;/label&gt;
+          &lt;select id=&quot;employeeSelect&quot;&gt;
+            &lt;option value=&quot;&quot;&gt;Все&lt;/option&gt;
+          &lt;/select&gt;
+        &lt;/div&gt;
+
+        &lt;div&gt;
+          &lt;label&gt;Управляющий&lt;/label&gt;
+          &lt;select id=&quot;managerSelect&quot;&gt;
+            &lt;option value=&quot;&quot;&gt;Все&lt;/option&gt;
+          &lt;/select&gt;
+        &lt;/div&gt;
+
+        &lt;div&gt;
+          &lt;label&gt;Адрес&lt;/label&gt;
+          &lt;select id=&quot;addressSelect&quot;&gt;
+            &lt;option value=&quot;&quot;&gt;Все&lt;/option&gt;
+          &lt;/select&gt;
+        &lt;/div&gt;
+
+        &lt;div&gt;
+          &lt;label&gt;Месяц&lt;/label&gt;
+          &lt;input type=&quot;month&quot; id=&quot;monthPick&quot;&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;footnote&quot;&gt;Календарь показывает только часы по дням. В таблице ниже — часы + ФИО сотрудника + адрес + ФИО управляющего из данных.&lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section class=&quot;card&quot; aria-label=&quot;KPI&quot;&gt;
+      &lt;div class=&quot;kpis&quot;&gt;
+        &lt;div class=&quot;kpi&quot;&gt;&lt;div class=&quot;klabel&quot;&gt;Часов за месяц&lt;/div&gt;&lt;div class=&quot;kval&quot; id=&quot;kpiHours&quot;&gt;—&lt;/div&gt;&lt;/div&gt;
+        &lt;div class=&quot;kpi&quot;&gt;&lt;div class=&quot;klabel&quot;&gt;Дней с часами&lt;/div&gt;&lt;div class=&quot;kval&quot; id=&quot;kpiDays&quot;&gt;—&lt;/div&gt;&lt;/div&gt;
+        &lt;div class=&quot;kpi&quot;&gt;&lt;div class=&quot;klabel&quot;&gt;Среднее / день&lt;/div&gt;&lt;div class=&quot;kval&quot; id=&quot;kpiAvg&quot;&gt;—&lt;/div&gt;&lt;/div&gt;
+        &lt;div class=&quot;kpi&quot;&gt;&lt;div class=&quot;klabel&quot;&gt;Записей в логе&lt;/div&gt;&lt;div class=&quot;kval&quot; id=&quot;kpiRows&quot;&gt;—&lt;/div&gt;&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;!-- ✅ TOP 10 --&gt;
+    &lt;section class=&quot;card&quot; aria-label=&quot;Топ 10 сотрудников&quot;&gt;
+      &lt;div class=&quot;top10head&quot;&gt;
+        &lt;div class=&quot;top10title&quot;&gt;TOP 10 сотрудников по часам&lt;/div&gt;
+        &lt;div class=&quot;top10sub&quot; id=&quot;top10Scope&quot;&gt;за выбранный месяц&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;ranklist&quot; id=&quot;top10List&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;footnote&quot;&gt;Рейтинг считается по сумме &lt;span style=&quot;font-family:var(--mono)&quot;&gt;worktime&lt;/span&gt; за месяц с учётом фильтров.&lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section class=&quot;gridwrap&quot;&gt;
+      &lt;section class=&quot;card&quot; aria-label=&quot;Календарь&quot;&gt;
+        &lt;div class=&quot;calhead&quot;&gt;
+          &lt;div&gt;
+            &lt;div class=&quot;monthname&quot; id=&quot;monthName&quot;&gt;Месяц&lt;/div&gt;
+            &lt;div class=&quot;footnote&quot; id=&quot;caption&quot;&gt;Фильтры: все&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div style=&quot;display:flex; gap:8px;&quot;&gt;
+            &lt;button id=&quot;btnPrev&quot;&gt;‹&lt;/button&gt;
+            &lt;button id=&quot;btnNext&quot;&gt;›&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;calendar&quot; id=&quot;calendar&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;footnote&quot; id=&quot;footnote&quot;&gt;Источник: Google Sheets через GViz JSONP.&lt;/div&gt;
+      &lt;/section&gt;
+
+      &lt;section class=&quot;card tablewrap&quot; aria-label=&quot;Таблица на месяц&quot;&gt;
+        &lt;div style=&quot;overflow:auto; max-height: 48vh; overflow-x:auto;&quot;&gt;
+          &lt;table&gt;
+            &lt;thead&gt;
+              &lt;tr&gt;
+                &lt;th&gt;Дата&lt;/th&gt;
+                &lt;th&gt;Часы&lt;/th&gt;
+                &lt;th&gt;Сотрудник&lt;/th&gt;
+                &lt;th&gt;Адрес&lt;/th&gt;
+                &lt;th&gt;Управляющий&lt;/th&gt;
+              &lt;/tr&gt;
+            &lt;/thead&gt;
+            &lt;tbody id=&quot;tbody&quot;&gt;&lt;/tbody&gt;
+          &lt;/table&gt;
+        &lt;/div&gt;
+        &lt;div style=&quot;margin-top:10px; display:flex; justify-content:flex-start; gap:8px;&quot;&gt;
+          &lt;button id=&quot;btnBackBottom&quot; title=&quot;На главную&quot;&gt;←&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/section&gt;
+    &lt;/section&gt;
+  &lt;/div&gt;
+
+&lt;script&gt;
+/** ============================
+ *  CONFIG
+ *  ============================ */
+const CONFIG = {
+  COMPANY_NAME: &quot;Учёт рабочего времени&quot;,
+  HOME_URL: &quot;/&quot;,
+
+  // ID таблицы (между /d/ и /edit)
+  SHEET_ID: &quot;1SDobJ4Qix03LGBEw_Z8ek5Me4_uz8enJNfuOVNgFT_A&quot;,
+  // gid листа с данными
+  GID: &quot;0&quot;,
+
+  // Названия колонок (как в первой строке)
+  FIELD_DATETIME: &quot;date&quot;,
+  FIELD_EMPLOYEE: &quot;employee_name&quot;,
+  FIELD_ADDRESS: &quot;address&quot;,          // ✅ НОВОЕ
+  FIELD_MANAGER: &quot;manager_name&quot;,
+  FIELD_WORKTIME: &quot;worktime&quot;,
+
+  LOCALE: &quot;ru-RU&quot;
+};
+
+document.getElementById(&quot;companyName&quot;).textContent = CONFIG.COMPANY_NAME;
+
+/** ============================
+ *  STATE
+ *  ============================ */
+let RAW = []; // {dt:Date, dayISO, emp, addr, mgr, hrs}
+let employees = new Set();
+let managers = new Set();
+let addresses = new Set();
+
+/** ============================
+ *  Helpers
+ *  ============================ */
+function pad2(n){ return String(n).padStart(2,&quot;0&quot;); }
+function toISODate(d){ return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`; }
+function setStatus(msg){ document.getElementById(&quot;loadStatus&quot;).textContent = msg; }
+
+function escapeHtml(s){
+  return String(s).replace(/[&amp;&lt;&gt;&quot;&#39;]/g, c =&gt; ({&#39;&amp;&#39;:&#39;&amp;amp;&#39;,&#39;&lt;&#39;:&#39;&amp;lt;&#39;,&#39;&gt;&#39;:&#39;&amp;gt;&#39;,&#39;&quot;&#39;:&#39;&amp;quot;&#39;,&quot;&#39;&quot;:&#39;&amp;#39;&#39;}[c]));
+}
+
+function fmtNumber(n){
+  const v = Math.round((n + Number.EPSILON) * 100) / 100;
+  return v.toLocaleString(CONFIG.LOCALE, { maximumFractionDigits: 2 });
+}
+
+function parseGvizDateCell(cell){
+  if(cell == null) return null;
+  let v = (typeof cell === &quot;object&quot; &amp;&amp; cell.v !== undefined) ? cell.v : cell;
+  if(v instanceof Date &amp;&amp; !isNaN(v)) return v;
+
+  const s = String(v).trim();
+  const m = s.match(/^Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)$/);
+  if(m){
+    const yy = +m[1], mm = +m[2], dd = +m[3];
+    const hh = m[4] ? +m[4] : 0;
+    const mi = m[5] ? +m[5] : 0;
+    const ss = m[6] ? +m[6] : 0;
+    return new Date(yy, mm, dd, hh, mi, ss);
+  }
+
+  const m2 = s.match(/^(\d{2})\.(\d{2})\.(\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?$/);
+  if(m2){
+    const d = new Date(+m2[3], +m2[2]-1, +m2[1], m2[4]?+m2[4]:0, m2[5]?+m2[5]:0, m2[6]?+m2[6]:0);
+    if(!isNaN(d)) return d;
+  }
+
+  const d3 = new Date(s);
+  if(!isNaN(d3)) return d3;
+
+  return null;
+}
+
+function cellToText(cell){
+  if(cell == null) return &quot;&quot;;
+  if(typeof cell === &quot;object&quot; &amp;&amp; cell.f !== undefined) return String(cell.f).trim();
+  if(typeof cell === &quot;object&quot; &amp;&amp; cell.v !== undefined) return String(cell.v).trim();
+  return String(cell).trim();
+}
+
+function cellToNumber(cell){
+  if(cell == null) return 0;
+  let v = (typeof cell === &quot;object&quot; &amp;&amp; cell.v !== undefined) ? cell.v : cell;
+  if(typeof v === &quot;number&quot;) return isFinite(v) ? v : 0;
+  const s = String(v).trim().replace(/\s/g,&quot;&quot;).replace(&quot;,&quot;,&quot;.&quot; );
+  const n = parseFloat(s);
+  return isFinite(n) ? n : 0;
+}
+
+function monthNameRU(year, monthIndex){
+  const d = new Date(year, monthIndex, 1);
+  return d.toLocaleDateString(CONFIG.LOCALE, { month:&quot;long&quot;, year:&quot;numeric&quot; });
+}
+function monthISO(year, monthIndex){
+  return `${year}-${pad2(monthIndex+1)}`;
+}
+function addMonths(isoYM, delta){
+  const [y,m] = isoYM.split(&quot;-&quot;).map(Number);
+  const d = new Date(y, m-1, 1);
+  d.setMonth(d.getMonth()+delta);
+  return monthISO(d.getFullYear(), d.getMonth());
+}
+function capitalizeFirst(s){
+  if(!s) return s;
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+/** ============================
+ *  Data load via GViz JSONP
+ *  ============================ */
+function loadData(){
+  setStatus(&quot;Загрузка…&quot;);
+  const old = document.getElementById(&quot;gvizScript&quot;);
+  if(old) old.remove();
+
+  const cb = &quot;gviz_cb_&quot; + Math.random().toString(16).slice(2);
+  window[cb] = function(resp){
+    try{
+      parseGviz(resp);
+      buildSelectors();
+      initMonthDefault();
+      applyAndRender();
+      setStatus(`Загружено: ${RAW.length} строк`);
+    }catch(e){
+      console.error(e);
+      setStatus(&quot;Ошибка. Проверь: доступ к таблице, gid, и названия колонок в CONFIG.&quot;);
+    }finally{
+      try{ delete window[cb]; }catch(_){}
+    }
+  };
+
+  const script = document.createElement(&quot;script&quot;);
+  script.id = &quot;gvizScript&quot;;
+  script.src = `https://docs.google.com/spreadsheets/d/${encodeURIComponent(CONFIG.SHEET_ID)}/gviz/tq?gid=${encodeURIComponent(CONFIG.GID)}&amp;tqx=out:json;responseHandler:${cb}`;
+  script.onerror = () =&gt; setStatus(&quot;Ошибка загрузки (доступ/сеть).&quot;);
+  document.body.appendChild(script);
+}
+
+function parseGviz(resp){
+  const table = resp.table;
+  const cols = table.cols.map(c =&gt; (c.label || c.id || &quot;&quot;).trim());
+  const rows = table.rows || [];
+
+  const idx = {};
+  cols.forEach((name, i) =&gt; idx[name] = i);
+
+  const iDT   = idx[CONFIG.FIELD_DATETIME];
+  const iEmp  = idx[CONFIG.FIELD_EMPLOYEE];
+  const iAddr = idx[CONFIG.FIELD_ADDRESS];
+  const iMgr  = idx[CONFIG.FIELD_MANAGER];
+  const iWT   = idx[CONFIG.FIELD_WORKTIME];
+
+  if(iDT===undefined || iEmp===undefined || iAddr===undefined || iMgr===undefined || iWT===undefined){
+    throw new Error(&quot;Не найдены нужные колонки (проверь CONFIG.FIELD_*).&quot;);
+  }
+
+  RAW = [];
+  employees = new Set();
+  managers  = new Set();
+  addresses = new Set();
+
+  for(const r of rows){
+    const c = r.c || [];
+    const dt   = parseGvizDateCell(c[iDT]);
+    const emp  = cellToText(c[iEmp]);
+    const addr = cellToText(c[iAddr]);
+    const mgr  = cellToText(c[iMgr]);
+    const hrs  = cellToNumber(c[iWT]);
+
+    if(!dt || !emp) continue;
+
+    employees.add(emp);
+    if(mgr)  managers.add(mgr);
+    if(addr) addresses.add(addr);
+
+    RAW.push({ dt, dayISO: toISODate(dt), emp, addr, mgr, hrs });
+  }
+}
+
+/** ============================
+ *  UI init
+ *  ============================ */
+function buildSelectors(){
+  const empSel  = document.getElementById(&quot;employeeSelect&quot;);
+  const mgrSel  = document.getElementById(&quot;managerSelect&quot;);
+  const addrSel = document.getElementById(&quot;addressSelect&quot;);
+
+  const empList = Array.from(employees).sort((a,b)=&gt;a.localeCompare(b, CONFIG.LOCALE));
+  empSel.innerHTML = `&lt;option value=&quot;&quot;&gt;Все&lt;/option&gt;` + empList.map(x=&gt;`&lt;option value=&quot;${escapeHtml(x)}&quot;&gt;${escapeHtml(x)}&lt;/option&gt;`).join(&quot;&quot;);
+
+  const mgrList = Array.from(managers).sort((a,b)=&gt;a.localeCompare(b, CONFIG.LOCALE));
+  mgrSel.innerHTML = `&lt;option value=&quot;&quot;&gt;Все&lt;/option&gt;` + mgrList.map(x=&gt;`&lt;option value=&quot;${escapeHtml(x)}&quot;&gt;${escapeHtml(x)}&lt;/option&gt;`).join(&quot;&quot;);
+
+  const addrList = Array.from(addresses).sort((a,b)=&gt;a.localeCompare(b, CONFIG.LOCALE));
+  addrSel.innerHTML = `&lt;option value=&quot;&quot;&gt;Все&lt;/option&gt;` + addrList.map(x=&gt;`&lt;option value=&quot;${escapeHtml(x)}&quot;&gt;${escapeHtml(x)}&lt;/option&gt;`).join(&quot;&quot;);
+}
+
+function initMonthDefault(){
+  const d = new Date();
+  document.getElementById(&quot;monthPick&quot;).value = monthISO(d.getFullYear(), d.getMonth());
+}
+
+/** ============================
+ *  TOP 10
+ *  ============================ */
+function renderTop10(filteredRows, empFilter, mgrFilter, addrFilter, ym){
+  const totals = new Map(); // emp -&gt; hours
+  for(const r of filteredRows){
+    totals.set(r.emp, (totals.get(r.emp) || 0) + (r.hrs || 0));
+  }
+
+  const list = Array.from(totals.entries())
+    .map(([name, hrs]) =&gt; ({ name, hrs }))
+    .sort((a,b) =&gt; b.hrs - a.hrs)
+    .slice(0, 10);
+
+  const scope = document.getElementById(&quot;top10Scope&quot;);
+  scope.textContent =
+    `месяц ${ym} • ` +
+    `${mgrFilter ? (&quot;упр. &quot; + mgrFilter) : &quot;все управляющие&quot;}` +
+    `${addrFilter ? (&quot; • адрес &quot; + addrFilter) : &quot;&quot;}` +
+    `${empFilter ? (&quot; • сотрудник &quot; + empFilter) : &quot;&quot;}`;
+
+  const host = document.getElementById(&quot;top10List&quot;);
+  host.innerHTML = &quot;&quot;;
+
+  if(list.length === 0){
+    host.innerHTML = `&lt;div class=&quot;muted&quot;&gt;Нет данных для рейтинга по выбранным фильтрам.&lt;/div&gt;`;
+    return;
+  }
+
+  const max = Math.max(...list.map(x =&gt; x.hrs), 1);
+
+  list.forEach((x, i) =&gt; {
+    const pct = Math.round((x.hrs / max) * 100);
+    const row = document.createElement(&quot;div&quot;);
+    row.className = &quot;rankrow&quot;;
+    row.innerHTML = `
+      &lt;div class=&quot;ranknum&quot;&gt;${i+1}&lt;/div&gt;
+      &lt;div class=&quot;rankmain&quot;&gt;
+        &lt;div class=&quot;rankname&quot; title=&quot;${escapeHtml(x.name)}&quot;&gt;${escapeHtml(x.name)}&lt;/div&gt;
+        &lt;div class=&quot;barwrap&quot;&gt;&lt;div class=&quot;bar&quot; style=&quot;width:${pct}%&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;rankhrs&quot;&gt;${fmtNumber(x.hrs)}&lt;/div&gt;
+    `;
+    host.appendChild(row);
+  });
+}
+
+/** ============================
+ *  Render (Filters -&gt; Calendar + Table + Top10)
+ *  ============================ */
+function applyAndRender(){
+  const emp  = document.getElementById(&quot;employeeSelect&quot;).value;
+  const mgr  = document.getElementById(&quot;managerSelect&quot;).value;
+  const addr = document.getElementById(&quot;addressSelect&quot;).value;
+  const ym   = document.getElementById(&quot;monthPick&quot;).value; // YYYY-MM
+
+  const [y, m] = ym.split(&quot;-&quot;).map(Number);
+  const start = new Date(y, m-1, 1, 0,0,0);
+  const end   = new Date(y, m,   0, 23,59,59);
+
+  const filtered = RAW.filter(r=&gt;{
+    if(emp  &amp;&amp; r.emp  !== emp)  return false;
+    if(mgr  &amp;&amp; r.mgr  !== mgr)  return false;
+    if(addr &amp;&amp; r.addr !== addr) return false;
+    if(r.dt &lt; start || r.dt &gt; end) return false;
+    return true;
+  });
+
+  // ✅ TOP 10 по сотрудникам
+  renderTop10(filtered, emp, mgr, addr, ym);
+
+  // 1) Для календаря: day -&gt; hours
+  const byDayHours = new Map();
+
+  // 2) Для таблицы: (day||emp) -&gt; {dayISO, emp, addr, hrs, mgrSet}
+  const byDayEmpMgr = new Map();
+
+  for (const r of filtered) {
+    byDayHours.set(r.dayISO, (byDayHours.get(r.dayISO) || 0) + (r.hrs || 0));
+
+    const key = `${r.dayISO}||${r.emp}`;
+    const cur = byDayEmpMgr.get(key) || {
+      dayISO: r.dayISO,
+      emp: r.emp,
+      addr: r.addr,
+      hrs: 0,
+      mgrSet: new Set()
+    };
+    cur.hrs += (r.hrs || 0);
+    if (r.addr) cur.addr = r.addr; // подстрахуем
+    if (r.mgr) cur.mgrSet.add(r.mgr);
+    byDayEmpMgr.set(key, cur);
+  }
+
+  // KPI
+  const daysArr = Array.from(byDayHours.entries())
+    .map(([day,hrs])=&gt;({day,hrs}))
+    .sort((a,b)=&gt;a.day.localeCompare(b.day));
+
+  const totalH = daysArr.reduce((s,x)=&gt;s+x.hrs,0);
+  const dayCount = daysArr.length;
+  const avg = dayCount ? totalH/dayCount : 0;
+
+  document.getElementById(&quot;kpiHours&quot;).textContent = fmtNumber(totalH);
+  document.getElementById(&quot;kpiDays&quot;).textContent  = String(dayCount);
+  document.getElementById(&quot;kpiAvg&quot;).textContent   = fmtNumber(avg);
+  document.getElementById(&quot;kpiRows&quot;).textContent  = String(filtered.length);
+
+  // подписи
+  document.getElementById(&quot;monthName&quot;).textContent = capitalizeFirst(monthNameRU(y, m-1));
+  document.getElementById(&quot;caption&quot;).textContent =
+    `Сотрудник: ${emp || &quot;все&quot;} • Управляющий: ${mgr || &quot;все&quot;} • Адрес: ${addr || &quot;все&quot;} • Месяц: ${ym}`;
+
+  renderCalendar(y, m-1, byDayHours);
+  renderMonthTable(y, m-1, byDayEmpMgr);
+
+  document.getElementById(&quot;footnote&quot;).textContent =
+    `Источник: Google Sheets (GViz JSONP). Календарь: часы. Таблица: часы + сотрудник + адрес + управляющий из данных.`;
+}
+
+function renderCalendar(year, monthIndex, byDayHours){
+  const cal = document.getElementById(&quot;calendar&quot;);
+  cal.innerHTML = &quot;&quot;;
+
+  const dow = [&quot;Пн&quot;,&quot;Вт&quot;,&quot;Ср&quot;,&quot;Чт&quot;,&quot;Пт&quot;,&quot;Сб&quot;,&quot;Вс&quot;];
+  for(const d of dow){
+    const el = document.createElement(&quot;div&quot;);
+    el.className = &quot;dow&quot;;
+    el.textContent = d;
+    cal.appendChild(el);
+  }
+
+  const first = new Date(year, monthIndex, 1);
+  const last  = new Date(year, monthIndex+1, 0);
+  const daysInMonth = last.getDate();
+
+  const jsDay = first.getDay(); // 0=вс..6=сб
+  const shift = (jsDay === 0) ? 6 : (jsDay - 1);
+
+  const totalCells = Math.ceil((shift + daysInMonth) / 7) * 7;
+
+  const today = new Date();
+  const todayISO = toISODate(today);
+
+  for(let i=0; i&lt;totalCells; i++){
+    const dayNum = i - shift + 1;
+    const cell = document.createElement(&quot;div&quot;);
+    cell.className = &quot;day&quot;;
+
+    if(dayNum &lt; 1 || dayNum &gt; daysInMonth){
+      cell.classList.add(&quot;off&quot;);
+      cell.innerHTML = `&lt;div class=&quot;dnum&quot;&gt;—&lt;/div&gt;&lt;div class=&quot;hours&quot;&gt; &lt;/div&gt;&lt;div class=&quot;hint&quot;&gt; &lt;/div&gt;`;
+      cal.appendChild(cell);
+      continue;
+    }
+
+    const d = new Date(year, monthIndex, dayNum);
+    const iso = toISODate(d);
+    const hrs = byDayHours.get(iso) || 0;
+
+    if(iso === todayISO) cell.classList.add(&quot;today&quot;);
+
+    const badge = hrs &gt; 0 ? `&lt;div class=&quot;badge&quot;&gt;ч&lt;/div&gt;` : &quot;&quot;;
+    cell.innerHTML = `
+      ${badge}
+      &lt;div class=&quot;dnum&quot;&gt;${dayNum}&lt;/div&gt;
+      &lt;div class=&quot;hours&quot;&gt;${hrs &gt; 0 ? fmtNumber(hrs) : &quot;—&quot;}&lt;/div&gt;
+      &lt;div class=&quot;hint&quot;&gt;${hrs &gt; 0 ? &quot;часов&quot; : &quot;нет данных&quot;}&lt;/div&gt;
+    `;
+    cal.appendChild(cell);
+  }
+}
+
+function renderMonthTable(year, monthIndex, byDayEmpMgr){
+  const tb = document.getElementById(&quot;tbody&quot;);
+  tb.innerHTML = &quot;&quot;;
+
+  const rows = Array.from(byDayEmpMgr.values())
+    .filter(x =&gt; {
+      const d = new Date(x.dayISO + &quot;T00:00:00&quot;);
+      return d.getFullYear() === year &amp;&amp; d.getMonth() === monthIndex;
+    })
+    .sort((a,b)=&gt;{
+      const c1 = a.dayISO.localeCompare(b.dayISO);
+      if(c1 !== 0) return c1;
+      return a.emp.localeCompare(b.emp, &quot;ru-RU&quot;);
+    });
+
+  if(rows.length === 0){
+    const tr = document.createElement(&quot;tr&quot;);
+    tr.innerHTML = `&lt;td class=&quot;muted&quot;&gt;—&lt;/td&gt;&lt;td class=&quot;muted&quot;&gt;—&lt;/td&gt;&lt;td class=&quot;muted&quot;&gt;Нет данных&lt;/td&gt;&lt;td class=&quot;muted&quot;&gt;—&lt;/td&gt;&lt;td class=&quot;muted&quot;&gt;—&lt;/td&gt;`;
+    tb.appendChild(tr);
+    return;
+  }
+
+  for(const r of rows){
+    const tr = document.createElement(&quot;tr&quot;);
+
+    const td1 = document.createElement(&quot;td&quot;);
+    td1.textContent = r.dayISO;
+    tr.appendChild(td1);
+
+    const td2 = document.createElement(&quot;td&quot;);
+    td2.style.fontFamily = &quot;var(--mono)&quot;;
+    td2.style.fontWeight = &quot;800&quot;;
+    td2.textContent = r.hrs ? fmtNumber(r.hrs) : &quot;0&quot;;
+    tr.appendChild(td2);
+
+    const td3 = document.createElement(&quot;td&quot;);
+    td3.textContent = r.emp || &quot;—&quot;;
+    tr.appendChild(td3);
+
+    const tdAddr = document.createElement(&quot;td&quot;);
+    tdAddr.textContent = r.addr || &quot;—&quot;;
+    tr.appendChild(tdAddr);
+
+    const td4 = document.createElement(&quot;td&quot;);
+    const mgrs = Array.from(r.mgrSet || []);
+    td4.textContent = mgrs.length ? mgrs.join(&quot;, &quot;) : &quot;—&quot;;
+    tr.appendChild(td4);
+
+    tb.appendChild(tr);
+  }
+}
+
+/** ============================
+ *  Events
+ *  ============================ */
+function wireEvents(){
+  const goHome = () =&gt; window.location.href = (CONFIG.HOME_URL || &quot;/&quot;).trim() || &quot;/&quot;;
+  document.getElementById(&quot;btnBackTop&quot;).addEventListener(&quot;click&quot;, goHome);
+  document.getElementById(&quot;btnBackBottom&quot;).addEventListener(&quot;click&quot;, goHome);
+
+  document.getElementById(&quot;btnRefresh&quot;).addEventListener(&quot;click&quot;, loadData);
+
+  document.getElementById(&quot;btnReset&quot;).addEventListener(&quot;click&quot;, () =&gt; {
+    document.getElementById(&quot;employeeSelect&quot;).value = &quot;&quot;;
+    document.getElementById(&quot;managerSelect&quot;).value  = &quot;&quot;;
+    document.getElementById(&quot;addressSelect&quot;).value  = &quot;&quot;;
+    initMonthDefault();
+    applyAndRender();
+  });
+
+  document.getElementById(&quot;employeeSelect&quot;).addEventListener(&quot;change&quot;, applyAndRender);
+  document.getElementById(&quot;managerSelect&quot;).addEventListener(&quot;change&quot;, applyAndRender);
+  document.getElementById(&quot;addressSelect&quot;).addEventListener(&quot;change&quot;, applyAndRender);
+  document.getElementById(&quot;monthPick&quot;).addEventListener(&quot;change&quot;, applyAndRender);
+
+  document.getElementById(&quot;btnPrev&quot;).addEventListener(&quot;click&quot;, () =&gt; {
+    const mp = document.getElementById(&quot;monthPick&quot;);
+    mp.value = addMonths(mp.value, -1);
+    applyAndRender();
+  });
+
+  document.getElementById(&quot;btnNext&quot;).addEventListener(&quot;click&quot;, () =&gt; {
+    const mp = document.getElementById(&quot;monthPick&quot;);
+    mp.value = addMonths(mp.value, +1);
+    applyAndRender();
+  });
+}
+
+/** ============================
+ *  Start
+ *  ============================ */
+wireEvents();
+loadData();
+&lt;/script&gt;
+
+&lt;/body&gt;&lt;/html&gt;"></iframe>
+        </div>
+      </main>
     </div>
-  </footer>
+  </div>
+
+  <script>
+    (function () {
+      const wrap = document.getElementById('frameWrap');
+      const btn = document.getElementById('toggleFullscreenBtn');
+      const body = document.body;
+      let expanded = false;
+
+      function setExpanded(nextState) {
+        expanded = !!nextState;
+        wrap.classList.toggle('is-fullscreen', expanded);
+        body.classList.toggle('fullscreen-mode', expanded);
+        btn.textContent = expanded ? 'Свернуть' : 'Развернуть';
+      }
+
+      btn.addEventListener('click', function () {
+        setExpanded(!expanded);
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && expanded) {
+          setExpanded(false);
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

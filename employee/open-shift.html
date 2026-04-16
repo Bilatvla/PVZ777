@@ -1,73 +1,1399 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Открытие смены — Портал ПВЗ</title>
-  <link rel="stylesheet" href="../assets/css/style.css" />
-  <link rel="stylesheet" href="../assets/css/pages.css" />
-  <script defer src="../assets/js/auth.js"></script>
-  <script defer src="../assets/js/navigation.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Дашборд подразделения</title>
+  <style>
+    :root{
+      --bg:#07111f;
+      --bg2:#0b1830;
+      --panel:rgba(10,19,36,.94);
+      --panel2:rgba(12,24,48,.98);
+      --text:#e8f0ff;
+      --muted:#9fb0d0;
+      --line:rgba(126,163,255,.18);
+      --accent:#5cc8ff;
+      --accent2:#6dd3ff;
+      --btn:#12213d;
+      --shadow:0 18px 50px rgba(0,0,0,.35);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      color:var(--text);
+      font:16px/1.45 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:
+        radial-gradient(900px 500px at -5% 10%, rgba(31,127,255,.20), transparent 55%),
+        radial-gradient(900px 500px at 105% 80%, rgba(92,200,255,.18), transparent 55%),
+        linear-gradient(180deg, #06101c 0%, #081224 45%, #07101b 100%);
+      min-height:100vh;
+    }
+    body.fullscreen-mode{
+      overflow:hidden;
+    }
+    .page{max-width:1600px;margin:0 auto;padding:18px}
+    .shell{display:grid;grid-template-columns:340px 1fr;gap:18px;align-items:start}
+    .side,.main{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+    .side{padding:16px;position:sticky;top:16px}
+    .breadcrumbs{display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:var(--muted);font-size:14px;margin-bottom:10px}
+    .breadcrumbs a{color:var(--text);text-decoration:none}
+    .page-title{margin:0 0 12px;font-size:30px;line-height:1.12}
+    .actions{display:flex;flex-wrap:wrap;gap:10px}
+    .mini-btn,
+    .frame-btn{
+      display:inline-flex;align-items:center;gap:8px;padding:12px 16px;border-radius:16px;
+      background:#12213d;border:1px solid rgba(126,163,255,.18);color:var(--text);
+      text-decoration:none;font-weight:700;cursor:pointer;
+    }
+    .main{padding:12px;overflow:hidden}
+    .frameWrap{
+      border-radius:18px;
+      overflow:hidden;
+      background:#fff;
+      border:1px solid rgba(126,163,255,.12);
+      position:relative;
+    }
+    .frameTop{
+      display:flex;
+      justify-content:flex-end;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      background:#0b1830;
+      border-bottom:1px solid rgba(126,163,255,.12);
+    }
+    .preview-frame{
+      display:block;
+      width:100%;
+      height:72vh;
+      border:0;
+      background:#fff;
+    }
+
+    .frameWrap.is-fullscreen{
+      position:fixed;
+      inset:0;
+      width:100vw;
+      height:100vh;
+      z-index:9999;
+      border-radius:0;
+      border:0;
+      background:#06101c;
+    }
+    .frameWrap.is-fullscreen .frameTop{
+      padding:12px 16px;
+      border-bottom:1px solid rgba(126,163,255,.16);
+    }
+    .frameWrap.is-fullscreen .preview-frame{
+      height:calc(100vh - 58px);
+    }
+
+    @media (max-width: 1100px){
+      .shell{grid-template-columns:1fr}
+      .side{position:static}
+      .page-title{font-size:24px}
+      .preview-frame{height:78vh}
+    }
+    @media (max-width: 640px){
+      .page{padding:12px}
+      .side{padding:14px}
+      .page-title{font-size:22px}
+      .mini-btn,.frame-btn{padding:11px 14px}
+      .preview-frame{height:72vh}
+      .frameWrap.is-fullscreen .preview-frame{
+        height:calc(100vh - 56px);
+      }
+    }
+  </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-shell">
-      <div class="brand">
-        <div class="brand-mark"></div>
-        <div>
-          <div class="brand-title">PVZ Portal</div>
-          <div class="brand-subtitle">Внутренний портал</div>
+  <div class="page">
+    <div class="shell">
+      <aside class="side">
+        <nav class="breadcrumbs">
+          <a href="../home.html">Главная</a>
+          <span>/</span>
+          <a href="./index.html">Сотрудники</a>
+          <span>/</span>
+          <span>Дашборд подразделения</span>
+        </nav>
+        <h1 class="page-title">Дашборд подразделения</h1>
+        <div class="actions">
+          <a class="mini-btn" href="./index.html">← Назад</a>
+          <a class="mini-btn" href="../home.html">⌂ На главную</a>
         </div>
-      </div>
-      <div class="header-actions">
-        <button class="btn btn-ghost" onclick="logout()">Выйти</button>
-      </div>
-    </div>
-  </header>
+      </aside>
 
-  <main class="page">
-    <section class="hero hero-compact">
-      <div class="hero-bg hero-bg-1"></div>
-      <div class="hero-bg hero-bg-2"></div>
-      <div class="hero-inner">
-        <nav class="breadcrumb" aria-label="Навигация"><a class="crumb" href="index.html">Сотрудники</a><span class="dot">•</span><span class="crumb current">Открытие смены</span></nav>
-        <div class="hero-copy">
-          <div class="eyebrow">Предпросмотр Google-ссылки</div>
-          <h1>Открытие смены</h1>
-          <p class="lead">На этой странице сразу открывается окно предпросмотра. Для запуска рабочей версии замените две ссылки в коде: одну для preview, вторую для открытия отдельно.</p>
-          <div class="hero-meta">Страница готова для быстрого копирования</div>
-        </div>
-        <div class="hero-actions">
-          <a class="btn btn-secondary btn-small" href="index.html">Назад</a>
-          <a class="btn btn-secondary btn-small" href="../home.html">На главную</a>
-          <button class="btn btn-ghost btn-small" onclick="logout()">Выйти</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="content-wrap">
-      <section class="surface action-surface preview-surface">
-        <div class="preview-toolbar">
-          <div>
-            <div class="inline-note">Предпросмотр</div>
-            <h2 class="preview-title">Окно документа</h2>
-            <p class="preview-subtitle">Вставьте сюда Google preview-ссылку, и документ будет открываться прямо на странице.</p>
+      <main class="main">
+        <div class="frameWrap" id="frameWrap">
+          <div class="frameTop">
+            <button class="frame-btn" id="toggleFullscreenBtn" type="button">Развернуть</button>
           </div>
-          <a class="btn btn-primary btn-small" href="https://docs.google.com/" target="_blank" rel="noopener noreferrer">Открыть отдельно</a>
-        </div>
-        <div class="preview-shell">
-          <iframe class="preview-frame" src="https://docs.google.com/" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
-        </div>
-        <div class="dev-note"><strong>Где менять ссылки:</strong> найдите в коде этой страницы <code>href="https://docs.google.com/"</code> и <code>src="https://docs.google.com/"</code>, затем замените на свои рабочие адреса.</div>
-      </section>
-    </section>
-  </main>
+          <iframe
+            id="dashboardFrame"
+            class="preview-frame"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-popups allow-downloads"
+            srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;ru&quot;&gt;&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1,viewport-fit=cover&quot;&gt;
+  &lt;title&gt;Открытие Смены&lt;/title&gt;
+  &lt;style&gt;
+    :root{
+      --bg:#0b0f14;
+      --card:#111824;
+      --card2:#0f1621;
+      --text:#e6eefc;
+      --muted:#9bb0cf;
+      --line:#1d2a3a;
+      --accent:#7dd3fc;
+      --good:#22c55e;
+      --bad:#ef4444;
+      --warn:#f59e0b;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --r:16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, &quot;Liberation Mono&quot;, &quot;Courier New&quot;, monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, &quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 900px at 10% 0%, rgba(125,211,252,.12), transparent 55%),
+                  radial-gradient(900px 700px at 90% 20%, rgba(34,197,94,.10), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      font-family:var(--sans);
+      -webkit-font-smoothing:antialiased;
+      padding:16px 12px 24px;
+      display:flex;
+      justify-content:center;
+    }
+    .app{
+      width:100%;
+      max-width:420px; /* 9:16 mobile max */
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
 
-  <footer class="site-footer">
-    <div class="footer-shell">
-      <div>Внутренний портал ПВЗ</div>
-      <div>Страница с предпросмотром</div>
+    /* ====== RESPONSIVE: сохраняем моб. вид, но расширяемся на больших экранах ====== */
+    @media (min-width: 860px){
+      body{ padding:24px 24px 32px; }
+      .app{ max-width: 1200px; }
+      /* на широком экране делаем KPI/фильтры чуть свободнее */
+      .filters{ grid-template-columns: repeat(3, 1fr); }
+      .kpis{ grid-template-columns: repeat(3, 1fr); }
+      .head{ padding:12px 14px; }
+    }
+
+    @media (min-width: 1200px){
+      .filters{ grid-template-columns: repeat(4, 1fr); }
+    }
+    header{
+      position:sticky;
+      top:0;
+      z-index:5;
+      background: linear-gradient(180deg, rgba(11,15,20,.98), rgba(11,15,20,.82));
+      backdrop-filter: blur(10px);
+      padding:10px 0 6px;
+    }
+    .head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      background: rgba(17,24,36,.75);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+    }
+    .title{
+      font-size:16px;
+      font-weight:700;
+      letter-spacing:.2px;
+      line-height:1.1;
+      margin:0;
+    }
+    .controls{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:nowrap;
+    }
+    @media (min-width: 860px){
+      .controls{ flex-wrap:wrap; justify-content:flex-end; }
+    }
+    button{
+      appearance:none;
+      border:1px solid var(--line);
+      background: rgba(15,22,33,.9);
+      color:var(--text);
+      padding:8px 10px;
+      border-radius: 12px;
+      font-size:12px;
+      font-weight:650;
+      cursor:pointer;
+      transition: transform .06s ease, background .2s ease, border-color .2s ease;
+      white-space:nowrap;
+    }
+    button:hover{ border-color:#2b3d55; background: rgba(17,28,42,.95); }
+    button:active{ transform: translateY(1px); }
+    .statusline{
+      margin-top:6px;
+      font-size:12px;
+      color:var(--muted);
+      padding:0 4px 0 4px;
+    }
+
+    .card{
+      border:1px solid var(--line);
+      background: rgba(17,24,36,.72);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding:12px;
+    }
+
+    /* Calendar */
+    .cal-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      margin-bottom:10px;
+    }
+    .cal-month{
+      font-weight:750;
+      font-size:14px;
+      letter-spacing:.2px;
+    }
+    .cal-actions{
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .pill{
+      display:inline-flex;
+      gap:6px;
+      border:1px solid var(--line);
+      padding:6px;
+      border-radius: 999px;
+      background: rgba(15,22,33,.8);
+    }
+    .pill button{
+      padding:6px 10px;
+      border-radius: 999px;
+      border:1px solid transparent;
+      background: transparent;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .pill button.active{
+      background: rgba(125,211,252,.14);
+      border-color: rgba(125,211,252,.25);
+      color:var(--text);
+    }
+    .cal-grid{
+      display:grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap:6px;
+    }
+    .dow{
+      font-size:11px;
+      color:var(--muted);
+      text-align:center;
+      padding-bottom:2px;
+    }
+    .day{
+      position:relative;
+      border:1px solid var(--line);
+      background: rgba(15,22,33,.75);
+      border-radius: 12px;
+      padding:10px 0;
+      text-align:center;
+      font-size:12px;
+      cursor:pointer;
+      user-select:none;
+      min-height:36px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition: border-color .2s ease, background .2s ease, transform .06s ease;
+    }
+    .day:hover{ border-color:#2b3d55; background: rgba(17,28,42,.85); }
+    .day:active{ transform: translateY(1px); }
+    .day.muted{
+      opacity:.38;
+    }
+    .day.selected{
+      border-color: rgba(125,211,252,.65);
+      box-shadow: 0 0 0 3px rgba(125,211,252,.12);
+    }
+    .day.today{
+      outline: 2px solid rgba(34,197,94,.35);
+      outline-offset: 0px;
+    }
+    .dot{
+      position:absolute;
+      bottom:5px;
+      left:50%;
+      transform:translateX(-50%);
+      width:6px; height:6px;
+      border-radius: 50%;
+      background: rgba(155,176,207,.35);
+    }
+    .dot.hasdata{ background: rgba(125,211,252,.70); }
+    .legend{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-top:10px;
+      color:var(--muted);
+      font-size:11px;
+    }
+    .legend span{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
+    .legend i{
+      width:10px; height:10px; border-radius:999px;
+      display:inline-block;
+      background: rgba(155,176,207,.35);
+    }
+    .legend i.data{ background: rgba(125,211,252,.70); }
+    .legend i.sel{ background: rgba(125,211,252,.25); outline:1px solid rgba(125,211,252,.65); }
+
+    /* Filters */
+    .filters{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    label{
+      display:block;
+      font-size:11px;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+    select{
+      width:100%;
+      border:1px solid var(--line);
+      background: rgba(15,22,33,.85);
+      color:var(--text);
+      border-radius: 12px;
+      padding:10px;
+      font-size:12px;
+      outline:none;
+    }
+
+    /* KPI */
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+    }
+    .kpi{
+      background: rgba(15,22,33,.65);
+      border:1px solid var(--line);
+      border-radius: 14px;
+      padding:10px;
+      min-height:64px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .kpi .klabel{
+      font-size:11px;
+      color:var(--muted);
+      line-height:1.1;
+    }
+    .kpi .kval{
+      font-family:var(--mono);
+      font-size:16px;
+      font-weight:800;
+      letter-spacing:.4px;
+    }
+
+    /* Table */
+    .tablewrap{
+      overflow:hidden;
+    }
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      font-size:12px;
+    }
+    thead th{
+      position:sticky;
+      top:0;
+      background: rgba(17,24,36,.92);
+      backdrop-filter: blur(8px);
+      text-align:left;
+      padding:10px 10px;
+      border-bottom:1px solid var(--line);
+      color:var(--muted);
+      font-size:11px;
+      font-weight:700;
+      z-index:2;
+    }
+    tbody td{
+      padding:10px 10px;
+      border-bottom:1px solid rgba(29,42,58,.7);
+      vertical-align:middle;
+    }
+    tbody tr:hover td{
+      background: rgba(15,22,33,.55);
+    }
+    .status-dot{
+      width:12px; height:12px;
+      border-radius: 999px;
+      display:inline-block;
+      background: rgba(155,176,207,.35);
+    }
+    .status-dot.good{ background: var(--good); }
+    .status-dot.bad{ background: var(--bad); }
+
+    .status-dot.skip{ background: rgba(155,176,207,.55); }
+    .mbadge.skip{ background: rgba(155,176,207,.6); }
+    .muted{
+      color:var(--muted);
+    }
+    .footnote{
+      font-size:11px;
+      color:var(--muted);
+      margin-top:8px;
+      line-height:1.4;
+    }
+  
+    /* Today infographic card */
+    .todaycard{ padding:12px; }
+    .todayhead{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:10px; }
+    .todaytitle{ font-weight:800; font-size:14px; letter-spacing:.2px; }
+    .todaydate{ font-size:11px; color:var(--muted); }
+    .todaylayout{ display:grid; grid-template-columns: 132px 1fr; gap:12px; align-items:center; }
+    .todayring{ position:relative; width:132px; height:132px; }
+    .ring{ width:132px; height:132px; transform: rotate(-90deg); }
+    .ring-bg{ fill:none; stroke: rgba(155,176,207,.18); stroke-width:12; }
+    .ring-on{ fill:none; stroke: var(--good); stroke-width:12; stroke-linecap:round;
+              stroke-dasharray: 0 999; }
+    .ring-late{ fill:none; stroke: var(--bad); stroke-width:12; stroke-linecap:round;
+                stroke-dasharray: 0 999; }
+    .ringcenter{
+      position:absolute; inset:0;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      text-align:center;
+    }
+    .ringlabel{ font-size:11px; color:var(--muted); margin-bottom:2px; }
+    .ringvalue{ font-family:var(--mono); font-size:22px; font-weight:900; letter-spacing:.4px; }
+    .todaymetrics{ display:flex; flex-direction:column; gap:10px; }
+    .metric{ border:1px solid rgba(29,42,58,.7); background: rgba(15,22,33,.55); border-radius:14px; padding:10px; }
+    .mhead{ display:grid; grid-template-columns: 10px 1fr auto; gap:8px; align-items:center; }
+    .mbadge{ width:10px; height:10px; border-radius:999px; display:inline-block; }
+    .mbadge.good{ background: var(--good); }
+    .mbadge.bad{ background: var(--bad); }
+    .mlabel{ font-size:11px; color:var(--muted); }
+    .mvalue{ font-family:var(--mono); font-size:16px; font-weight:900; }
+    .mbar{ height:8px; border-radius:999px; background: rgba(155,176,207,.14); overflow:hidden; margin-top:8px; }
+    .mfill{ height:100%; width:0%; border-radius:999px; }
+    .mfill.good{ background: rgba(34,197,94,.95); }
+    .mfill.bad{ background: rgba(239,68,68,.95); }
+    .mnote{ margin-top:6px; font-size:11px; color:var(--muted); }
+    .todayfoot{ margin-top:10px; font-size:11px; }
+    @media (max-width: 360px){
+      .todaylayout{ grid-template-columns: 120px 1fr; }
+      .todayring, .ring{ width:120px; height:120px; }
+      .ringvalue{ font-size:20px; }
+    }
+
+  
+    /* Compact table to fit all columns horizontally */
+    table{ table-layout: fixed; }
+    thead th, tbody td{
+      padding: 6px 6px;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+    thead th:first-child, tbody td:first-child{
+      width: 18px;
+      padding-left: 4px;
+      padding-right: 4px;
+    }
+    tbody td{
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+  
+    /* Allow horizontal scroll for long address column */
+    .tablewrap { overflow-x: auto; }
+    table { min-width: 560px; }
+
+  
+    /* Override: show full text via horizontal scroll (no ellipsis clipping) */
+    tbody td{
+      overflow: visible !important;
+      text-overflow: clip !important;
+    }
+    table{
+      table-layout: auto !important;
+      min-width: 720px; /* wider so address fits; scroll available */
+    }
+
+  
+    /* Compact spacing while keeping horizontal scroll */
+    thead th, tbody td{
+      padding: 6px 6px;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+    thead th:first-child, tbody td:first-child{
+      width: 18px;
+      padding-left: 4px;
+      padding-right: 4px;
+    }
+
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class=&quot;app&quot;&gt;
+    &lt;header&gt;
+      &lt;div class=&quot;head&quot;&gt;
+        &lt;h1 class=&quot;title&quot; id=&quot;companyName&quot;&gt;Открытие смены&lt;/h1&gt;
+        &lt;div class=&quot;controls&quot;&gt;
+          &lt;!-- КНОПКА НАЗАД НА ГЛАВНУЮ (ВЕРХ) --&gt;
+          &lt;button id=&quot;btnBackTop&quot; title=&quot;На главную&quot;&gt;←&lt;/button&gt;
+          &lt;button id=&quot;btnRefresh&quot; title=&quot;Перезагрузить данные&quot;&gt;Обновить&lt;/button&gt;
+          &lt;button id=&quot;btnReset&quot; title=&quot;Сбросить фильтры и календарь&quot;&gt;Сбросить&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;statusline&quot; id=&quot;loadStatus&quot;&gt;Готов к загрузке…&lt;/div&gt;
+    &lt;/header&gt;
+
+    &lt;section class=&quot;card&quot; aria-label=&quot;Календарь&quot;&gt;
+      &lt;div class=&quot;cal-head&quot;&gt;
+        &lt;div&gt;
+          &lt;div class=&quot;cal-month&quot; id=&quot;calMonthLabel&quot;&gt;—&lt;/div&gt;
+          &lt;div class=&quot;muted&quot; style=&quot;font-size:11px;margin-top:2px&quot; id=&quot;calModeLabel&quot;&gt;Фильтр: —&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;cal-actions&quot;&gt;
+          &lt;button id=&quot;btnPrev&quot; aria-label=&quot;Предыдущий месяц&quot;&gt;‹&lt;/button&gt;
+          &lt;button id=&quot;btnToday&quot;&gt;Сегодня&lt;/button&gt;
+          &lt;button id=&quot;btnNext&quot; aria-label=&quot;Следующий месяц&quot;&gt;›&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;pill&quot; role=&quot;tablist&quot; aria-label=&quot;Режим календаря&quot;&gt;
+        &lt;button id=&quot;modeDay&quot; class=&quot;active&quot; role=&quot;tab&quot; aria-selected=&quot;true&quot;&gt;День&lt;/button&gt;
+        &lt;button id=&quot;modeMonth&quot; role=&quot;tab&quot; aria-selected=&quot;false&quot;&gt;Месяц&lt;/button&gt;
+      &lt;/div&gt;
+
+      &lt;div style=&quot;margin-top:10px&quot; class=&quot;cal-grid&quot; id=&quot;calDows&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;cal-grid&quot; id=&quot;calGrid&quot; style=&quot;margin-top:6px&quot;&gt;&lt;/div&gt;
+
+      &lt;div class=&quot;legend&quot;&gt;
+        &lt;span&gt;&lt;i class=&quot;data&quot;&gt;&lt;/i&gt;есть данные&lt;/span&gt;
+        &lt;span&gt;&lt;i class=&quot;sel&quot;&gt;&lt;/i&gt;выбрано&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    
+&lt;section class=&quot;card todaycard&quot; aria-label=&quot;Открытие смены (выбранный день)&quot;&gt;
+  &lt;div class=&quot;todayhead&quot;&gt;
+    &lt;div class=&quot;todaytitle&quot;&gt;Открытие смены (выбранный день)&lt;/div&gt;
+    &lt;div class=&quot;todaydate&quot; id=&quot;selectedOpenLabel&quot;&gt;—&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;todaylayout&quot;&gt;
+    &lt;div class=&quot;todayring&quot; aria-hidden=&quot;true&quot;&gt;
+      &lt;svg viewBox=&quot;0 0 120 120&quot; class=&quot;ring&quot;&gt;
+        &lt;circle class=&quot;ring-bg&quot; cx=&quot;60&quot; cy=&quot;60&quot; r=&quot;46&quot;&gt;&lt;/circle&gt;
+        &lt;circle class=&quot;ring-on&quot; cx=&quot;60&quot; cy=&quot;60&quot; r=&quot;46&quot;&gt;&lt;/circle&gt;
+        &lt;circle class=&quot;ring-late&quot; cx=&quot;60&quot; cy=&quot;60&quot; r=&quot;46&quot;&gt;&lt;/circle&gt;
+      &lt;/svg&gt;
+      &lt;div class=&quot;ringcenter&quot;&gt;
+        &lt;div class=&quot;ringlabel&quot;&gt;Открыли до 12:00&lt;/div&gt;
+        &lt;div class=&quot;ringvalue&quot; id=&quot;selectedOpenedTotal&quot;&gt;—&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;todaymetrics&quot;&gt;
+      &lt;div class=&quot;metric&quot;&gt;
+        &lt;div class=&quot;mhead&quot;&gt;
+          &lt;span class=&quot;mbadge good&quot;&gt;&lt;/span&gt;
+          &lt;div class=&quot;mlabel&quot;&gt;Вовремя&lt;/div&gt;
+          &lt;div class=&quot;mvalue&quot; id=&quot;selectedOpenedOnTime&quot;&gt;—&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;mbar&quot;&gt;&lt;div class=&quot;mfill good&quot; id=&quot;barOnTime&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+        &lt;div class=&quot;mnote&quot; id=&quot;pctOnTime&quot;&gt;—&lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;metric&quot;&gt;
+        &lt;div class=&quot;mhead&quot;&gt;
+          &lt;span class=&quot;mbadge bad&quot;&gt;&lt;/span&gt;
+          &lt;div class=&quot;mlabel&quot;&gt;Не вовремя&lt;/div&gt;
+          &lt;div class=&quot;mvalue&quot; id=&quot;selectedOpenedLate&quot;&gt;—&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;mbar&quot;&gt;&lt;div class=&quot;mfill bad&quot; id=&quot;barLate&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+        &lt;div class=&quot;mnote&quot; id=&quot;pctLate&quot;&gt;—&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;todayfoot muted&quot;&gt;
+    Плановое время: &lt;span style=&quot;font-family:var(--mono)&quot;&gt;&lt;span id=&quot;planTimeInline&quot;&gt;—&lt;/span&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;todayfoot muted&quot;&gt;
+    После 12:00 (2 смена): &lt;span style=&quot;font-family:var(--mono)&quot;&gt;&lt;span id=&quot;openedAfterNoon&quot;&gt;—&lt;/span&gt;&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+
+
+    &lt;section class=&quot;card&quot; aria-label=&quot;Фильтры&quot;&gt;
+      &lt;div class=&quot;filters&quot; id=&quot;filters&quot;&gt;&lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section class=&quot;card&quot; aria-label=&quot;KPI&quot;&gt;
+      &lt;div class=&quot;kpis&quot; id=&quot;kpis&quot;&gt;&lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section class=&quot;card tablewrap&quot; aria-label=&quot;Таблица&quot;&gt;
+      &lt;div style=&quot;overflow:auto; max-height: 56vh;; overflow-x:auto;&quot;&gt;
+        &lt;table&gt;
+          &lt;thead&gt;&lt;tr id=&quot;theadRow&quot;&gt;&lt;/tr&gt;&lt;/thead&gt;
+          &lt;tbody id=&quot;tbody&quot;&gt;&lt;/tbody&gt;
+        &lt;/table&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;footnote&quot; id=&quot;footnote&quot;&gt;Источник: Google Sheets через GViz JSONP.&lt;/div&gt;
+      &lt;!-- КНОПКА НАЗАД НА ГЛАВНУЮ (НИЗ) --&gt;
+      &lt;div style=&quot;margin-top:10px; display:flex; justify-content:flex-start; gap:8px;&quot;&gt;
+        &lt;button id=&quot;btnBackBottom&quot; title=&quot;На главную&quot;&gt;←&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+  &lt;/div&gt;
+
+&lt;script&gt;
+/** ============================
+ *  CONFIG (меняешь тут)
+ *  ============================ */
+const CONFIG = {
+  COMPANY_NAME: &quot;Открытие смены&quot;,
+  HOME_URL: &quot;/&quot;, // ← ссылка на главную (меняйте при необходимости)
+
+  SHEET_ID: &quot;1Bx-g9_F7fWto9He_Fp9TyvM6F8ChJ0QK7i7Pb2a6IfI&quot;,
+  GID: &quot;0&quot;,
+  PLAN_TIME: &quot;08:45&quot;,          // HH:MM
+  SECOND_SHIFT_CUTOFF: &quot;12:00&quot;, // после этого времени считаем &quot;2 смена&quot; и исключаем из KPI &quot;вовремя/не вовремя&quot;
+  DATE_FIELD: &quot;date&quot;,
+  TIME_FIELD: &quot;arrival_time&quot;,
+
+  // какие колонки и как показывать
+  COLUMNS_MAP: {
+    &quot;date&quot;: &quot;Дата&quot;,
+    &quot;arrival_time&quot;: &quot;Приход&quot;,
+    &quot;employee_name&quot;: &quot;Сотрудник&quot;,
+    &quot;manager_name&quot;: &quot;Управляющий&quot;,
+    &quot;address&quot;: &quot;Адрес&quot;
+  },
+
+  // порядок колонок на экране (включая &quot;Статус&quot;)
+  COLUMN_ORDER: [&quot;Статус&quot;, &quot;Дата&quot;, &quot;Приход&quot;, &quot;Сотрудник&quot;, &quot;Управляющий&quot;, &quot;Адрес&quot;],
+
+  // фильтры (select)
+  FILTERS: [&quot;employee_name&quot;, &quot;manager_name&quot;],
+
+  // KPI карточки (строго трактовки ниже)
+  KPIS: [&quot;Строк в выборке&quot;, &quot;С отметкой времени&quot;, &quot;Опоздали&quot;],
+
+  // календарь
+  CALENDAR_DEFAULT: &quot;today&quot;,     // today | all
+  CALENDAR_MODE_DEFAULT: &quot;day&quot;   // day | month
+};
+
+/** ============================
+ *  STATE
+ *  ============================ */
+let RAW_ROWS = [];          // all rows parsed
+let VIEW_ROWS = [];         // after filters
+let filterState = {};       // { field: value or &quot;&quot; }
+let calendarState = {
+  mode: CONFIG.CALENDAR_MODE_DEFAULT, // &#39;day&#39; | &#39;month&#39;
+  selectedDate: null, // YYYY-MM-DD
+  viewYear: null,
+  viewMonth: null,    // 0-11
+};
+
+/** ============================
+ *  HELPERS: date/time parsing
+ *  ============================ */
+function pad2(n){ return String(n).padStart(2,&quot;0&quot;); }
+
+function toISODate(d){
+  return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+}
+
+function parseGvizDateCell(v){
+  // v might be: null, string, number, {v: &#39;Date(...)&#39;}, or direct &#39;Date(...)&#39;
+  if(v == null) return null;
+
+  // If cell is an object (typical GViz): {v: &quot;...&quot;, f:&quot;...&quot;}
+  if(typeof v === &quot;object&quot; &amp;&amp; v.v !== undefined) v = v.v;
+
+  if(typeof v !== &quot;string&quot;) {
+    // if it&#39;s a JS Date (unlikely here)
+    if(v instanceof Date &amp;&amp; !isNaN(v)) return new Date(v.getTime());
+    return null;
+  }
+
+  const s = v.trim();
+  const m = s.match(/^Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)$/);
+  if(m){
+    const yy = parseInt(m[1],10);
+    const mm = parseInt(m[2],10); // 0-based
+    const dd = parseInt(m[3],10);
+    const hh = m[4] ? parseInt(m[4],10) : 0;
+    const mi = m[5] ? parseInt(m[5],10) : 0;
+    const ss = m[6] ? parseInt(m[6],10) : 0;
+    return new Date(yy, mm, dd, hh, mi, ss);
+  }
+
+  // Try parse common strings
+  // YYYY-MM-DD
+  let m2 = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(m2){
+    return new Date(parseInt(m2[1],10), parseInt(m2[2],10)-1, parseInt(m2[3],10));
+  }
+  // DD.MM.YYYY
+  m2 = s.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
+  if(m2){
+    return new Date(parseInt(m2[3],10), parseInt(m2[2],10)-1, parseInt(m2[1],10));
+  }
+  return null;
+}
+
+function normalizeDateCell(cell){
+  const d = parseGvizDateCell(cell);
+  if(!d) return &quot;&quot;; // treat missing as empty
+  return toISODate(d);
+}
+
+function normalizeTimeCell(cell){
+  if(cell == null) return &quot;&quot;;
+  if(typeof cell === &quot;object&quot; &amp;&amp; cell.v !== undefined) cell = cell.v;
+
+  // GViz can send time-only as Date(1899,11,30,HH,MM,SS)
+  if(typeof cell === &quot;string&quot; &amp;&amp; cell.trim().startsWith(&quot;Date(&quot;)){
+    const d = parseGvizDateCell(cell);
+    if(!d) return &quot;&quot;;
+    return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+  }
+
+  if(cell instanceof Date &amp;&amp; !isNaN(cell)){
+    return `${pad2(cell.getHours())}:${pad2(cell.getMinutes())}`;
+  }
+
+  const s = String(cell).trim();
+  if(!s || s === &quot;—&quot;) return &quot;&quot;;
+
+  // HH:MM or HH:MM:SS
+  const m = s.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
+  if(!m) return &quot;&quot;;
+  const hh = Math.min(23, Math.max(0, parseInt(m[1],10)));
+  const mm = Math.min(59, Math.max(0, parseInt(m[2],10)));
+  return `${pad2(hh)}:${pad2(mm)}`;
+}
+
+function timeToMinutes(hhmm){
+  const m = String(hhmm).match(/^(\d{2}):(\d{2})$/);
+  if(!m) return null;
+  return parseInt(m[1],10)*60 + parseInt(m[2],10);
+}
+
+function computeStatusDot(timeHHMM){
+  // empty =&gt; bad; после 12:00 считаем 2 смену (в статусе серый, и не учитываем в KPI &quot;вовремя/не вовремя&quot;)
+  const t = normalizeTimeCell(timeHHMM);
+  const tmin = timeToMinutes(t);
+  const pmin = timeToMinutes(CONFIG.PLAN_TIME);
+  const cut = timeToMinutes(CONFIG.SECOND_SHIFT_CUTOFF);
+  if(tmin == null || pmin == null) return &quot;bad&quot;;
+  if(cut != null &amp;&amp; tmin &gt;= cut) return &quot;skip&quot;;
+  return (tmin &lt;= pmin) ? &quot;good&quot; : &quot;bad&quot;;
+}
+
+/** ============================
+ *  GViz JSONP loader
+ *  ============================ */
+function setStatus(msg){
+  document.getElementById(&quot;loadStatus&quot;).textContent = msg;
+}
+function loadData(){
+  setStatus(&quot;Загрузка…&quot;);
+  // Clean previous injected script if any
+  const old = document.getElementById(&quot;gvizScript&quot;);
+  if(old) old.remove();
+
+  // callback name unique
+  const cb = &quot;gviz_cb_&quot; + Math.random().toString(16).slice(2);
+  window[cb] = function(resp){
+    try{
+      parseGvizResponse(resp);
+      setStatus(`Загружено: ${RAW_ROWS.length} строк • Фильтр: ${calendarFilterLabel()}`);
+    }catch(e){
+      console.error(e);
+      setStatus(&quot;Ошибка парсинга данных.&quot;);
+    }finally{
+      // cleanup
+      try{ delete window[cb]; }catch(_){}
+    }
+  };
+
+  const script = document.createElement(&quot;script&quot;);
+  script.id = &quot;gvizScript&quot;;
+  // Note: tq can be empty - returns all
+  script.src = `https://docs.google.com/spreadsheets/d/${encodeURIComponent(CONFIG.SHEET_ID)}/gviz/tq?gid=${encodeURIComponent(CONFIG.GID)}&amp;tqx=out:json;responseHandler:${cb}`;
+  script.onerror = () =&gt; setStatus(&quot;Ошибка загрузки. Проверь доступ к Google Sheets.&quot;);
+  document.body.appendChild(script);
+}
+
+function parseGvizResponse(resp){
+  // resp is a google.visualization.QueryResponse-like object
+  const table = resp.table;
+  const cols = table.cols.map(c =&gt; c.label || c.id || &quot;&quot;);
+  const rows = table.rows || [];
+
+  RAW_ROWS = rows.map(r =&gt; {
+    const obj = {};
+    (r.c || []).forEach((cell, i) =&gt; {
+      const key = (cols[i] || `col_${i}`).trim();
+      // If sheet has header row, GViz labels columns from first row labels, not raw col letters.
+      obj[key] = cell; // keep raw cell (may be {v,f})
+    });
+    // Normalize known fields
+    obj.__date = normalizeDateCell(obj[CONFIG.DATE_FIELD]);
+    obj.__time = normalizeTimeCell(obj[CONFIG.TIME_FIELD]);
+    obj.__status = computeStatusDot(obj[CONFIG.TIME_FIELD]); // good|bad
+    return obj;
+  });
+
+  // Init calendar state if first load
+  initCalendarDefaults();
+
+  // Build UI
+  buildFilters();
+  buildTableHead();
+  buildKpiCards();
+
+  // Render calendar with data dots
+  renderCalendar();
+
+  // Apply all filters and render
+  applyAndRender();
+  renderOpenStatsForSelected();
+}
+
+/** ============================
+ *  UI builders
+ *  ============================ */
+function buildFilters(){
+  const wrap = document.getElementById(&quot;filters&quot;);
+  wrap.innerHTML = &quot;&quot;;
+  filterState = {};
+  CONFIG.FILTERS.forEach(field =&gt; filterState[field] = &quot;&quot;);
+
+  CONFIG.FILTERS.forEach(field =&gt; {
+    const div = document.createElement(&quot;div&quot;);
+    const lab = document.createElement(&quot;label&quot;);
+    lab.textContent = CONFIG.COLUMNS_MAP[field] || field;
+    const sel = document.createElement(&quot;select&quot;);
+    sel.dataset.field = field;
+    sel.innerHTML = `&lt;option value=&quot;&quot;&gt;Все&lt;/option&gt;`;
+    sel.addEventListener(&quot;change&quot;, () =&gt; {
+      filterState[field] = sel.value;
+      applyAndRender();
+    });
+    div.appendChild(lab);
+    div.appendChild(sel);
+    wrap.appendChild(div);
+  });
+
+  refreshFilterOptions(); // fill options after RAW_ROWS exists
+}
+
+function refreshFilterOptions(){
+  // Build options from rows that match ONLY calendar filter (so selects reflect current date/month context)
+  const baseRows = RAW_ROWS.filter(r =&gt; calendarPass(r));
+  CONFIG.FILTERS.forEach(field =&gt; {
+    const sel = document.querySelector(`select[data-field=&quot;${field}&quot;]`);
+    if(!sel) return;
+    const current = filterState[field] || &quot;&quot;;
+    const uniq = Array.from(new Set(baseRows.map(r =&gt; (r[field]?.v ?? r[field]?.f ?? r[field] ?? &quot;&quot;)).map(x =&gt; String(x).trim()).filter(Boolean)));
+    uniq.sort((a,b) =&gt; a.localeCompare(b, &quot;ru&quot;));
+    sel.innerHTML = `&lt;option value=&quot;&quot;&gt;Все&lt;/option&gt;` + uniq.map(v =&gt; `&lt;option value=&quot;${escapeHtml(v)}&quot;&gt;${escapeHtml(v)}&lt;/option&gt;`).join(&quot;&quot;);
+    sel.value = current;
+  });
+}
+
+function buildKpiCards(){
+  const wrap = document.getElementById(&quot;kpis&quot;);
+  wrap.innerHTML = &quot;&quot;;
+  CONFIG.KPIS.forEach(name =&gt; {
+    const div = document.createElement(&quot;div&quot;);
+    div.className = &quot;kpi&quot;;
+    div.innerHTML = `&lt;div class=&quot;klabel&quot;&gt;${escapeHtml(name)}&lt;/div&gt;&lt;div class=&quot;kval&quot; data-kpi=&quot;${escapeHtml(name)}&quot;&gt;—&lt;/div&gt;`;
+    wrap.appendChild(div);
+  });
+}
+
+function buildTableHead(){
+  const tr = document.getElementById(&quot;theadRow&quot;);
+  tr.innerHTML = &quot;&quot;;
+  CONFIG.COLUMN_ORDER.forEach(label =&gt; {
+    const th = document.createElement(&quot;th&quot;);
+    th.textContent = label;
+    tr.appendChild(th);
+  });
+}
+
+/** ============================
+ *  Calendar
+ *  ============================ */
+const DOWS = [&quot;Пн&quot;,&quot;Вт&quot;,&quot;Ср&quot;,&quot;Чт&quot;,&quot;Пт&quot;,&quot;Сб&quot;,&quot;Вс&quot;];
+
+function initCalendarDefaults(){
+  const now = new Date();
+  calendarState.viewYear = now.getFullYear();
+  calendarState.viewMonth = now.getMonth();
+
+  if(CONFIG.CALENDAR_DEFAULT === &quot;today&quot;){
+    calendarState.selectedDate = toISODate(now);
+  }else{
+    calendarState.selectedDate = null; // no filter
+  }
+
+  calendarState.mode = CONFIG.CALENDAR_MODE_DEFAULT || &quot;day&quot;;
+  setCalendarMode(calendarState.mode, false);
+}
+
+function setCalendarMode(mode, rerender=true){
+  calendarState.mode = mode;
+  document.getElementById(&quot;modeDay&quot;).classList.toggle(&quot;active&quot;, mode===&quot;day&quot;);
+  document.getElementById(&quot;modeMonth&quot;).classList.toggle(&quot;active&quot;, mode===&quot;month&quot;);
+  document.getElementById(&quot;modeDay&quot;).setAttribute(&quot;aria-selected&quot;, mode===&quot;day&quot; ? &quot;true&quot; : &quot;false&quot;);
+  document.getElementById(&quot;modeMonth&quot;).setAttribute(&quot;aria-selected&quot;, mode===&quot;month&quot; ? &quot;true&quot; : &quot;false&quot;);
+  if(rerender){
+    renderCalendar();
+    refreshFilterOptions();
+    applyAndRender();
+  }else{
+    updateCalendarLabels();
+  }
+}
+
+function updateCalendarLabels(){
+  const m = calendarState.viewMonth;
+  const y = calendarState.viewYear;
+  const monthName = new Date(y, m, 1).toLocaleDateString(&quot;ru-RU&quot;, {month:&quot;long&quot;, year:&quot;numeric&quot;});
+  document.getElementById(&quot;calMonthLabel&quot;).textContent = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+  document.getElementById(&quot;calModeLabel&quot;).textContent = &quot;Фильтр: &quot; + calendarFilterLabel();
+}
+
+function calendarFilterLabel(){
+  if(CONFIG.CALENDAR_DEFAULT !== &quot;today&quot; &amp;&amp; !calendarState.selectedDate) return &quot;все даты&quot;;
+  if(calendarState.mode === &quot;month&quot;){
+    if(!calendarState.selectedDate) return &quot;все даты&quot;;
+    return calendarState.selectedDate.slice(0,7) + &quot; (месяц)&quot;;
+  }
+  return (calendarState.selectedDate || &quot;все даты&quot;) + &quot; (день)&quot;;
+}
+
+function renderCalendar(){
+  // DOW header
+  const dows = document.getElementById(&quot;calDows&quot;);
+  dows.innerHTML = &quot;&quot;;
+  DOWS.forEach(d =&gt; {
+    const el = document.createElement(&quot;div&quot;);
+    el.className = &quot;dow&quot;;
+    el.textContent = d;
+    dows.appendChild(el);
+  });
+
+  updateCalendarLabels();
+
+  const grid = document.getElementById(&quot;calGrid&quot;);
+  grid.innerHTML = &quot;&quot;;
+
+  const y = calendarState.viewYear;
+  const m = calendarState.viewMonth;
+
+  // We want Monday as first day
+  const first = new Date(y, m, 1);
+  const firstDow = (first.getDay() + 6) % 7; // 0=Mon ... 6=Sun
+  const start = new Date(y, m, 1 - firstDow);
+
+  const todayISO = toISODate(new Date());
+  const dataDays = buildDataDaySet(y, m); // set of YYYY-MM-DD with data in the month grid view range
+
+  for(let i=0;i&lt;42;i++){
+    const d = new Date(start.getFullYear(), start.getMonth(), start.getDate()+i);
+    const iso = toISODate(d);
+    const inMonth = d.getMonth() === m;
+
+    const cell = document.createElement(&quot;div&quot;);
+    cell.className = &quot;day&quot; + (inMonth ? &quot;&quot; : &quot; muted&quot;);
+    if(iso === todayISO) cell.classList.add(&quot;today&quot;);
+
+    // Selected logic depends on mode
+    if(calendarState.mode === &quot;day&quot;){
+      if(calendarState.selectedDate &amp;&amp; iso === calendarState.selectedDate) cell.classList.add(&quot;selected&quot;);
+    }else{
+      if(calendarState.selectedDate &amp;&amp; calendarState.selectedDate.slice(0,7) === iso.slice(0,7) &amp;&amp; inMonth){
+        // highlight month days subtly; but avoid selecting all grid cells outside month
+        cell.classList.add(&quot;selected&quot;);
+      }
+    }
+
+    cell.textContent = String(d.getDate());
+
+    const dot = document.createElement(&quot;div&quot;);
+    dot.className = &quot;dot&quot; + (dataDays.has(iso) ? &quot; hasdata&quot; : &quot;&quot;);
+    cell.appendChild(dot);
+
+    cell.addEventListener(&quot;click&quot;, () =&gt; {
+      calendarState.viewYear = d.getFullYear();
+      calendarState.viewMonth = d.getMonth();
+      calendarState.selectedDate = iso;
+      renderCalendar();
+      refreshFilterOptions();
+      applyAndRender();
+    });
+
+    grid.appendChild(cell);
+  }
+}
+
+function buildDataDaySet(viewY, viewM){
+  // Mark days that have rows in current calendar view month (by actual month)
+  const set = new Set();
+  for(const r of RAW_ROWS){
+    if(!r.__date) continue;
+    const yy = parseInt(r.__date.slice(0,4),10);
+    const mm = parseInt(r.__date.slice(5,7),10)-1;
+    if(yy === viewY &amp;&amp; mm === viewM){
+      set.add(r.__date);
+    }
+  }
+  return set;
+}
+
+/** ============================
+ *  Filtering + sorting + rendering
+ *  ============================ */
+function calendarPass(row){
+  // If default is today and selectedDate exists, filter. If default all and no selectedDate =&gt; pass all.
+  if(!calendarState.selectedDate){
+    return CONFIG.CALENDAR_DEFAULT === &quot;today&quot; ? false : true;
+  }
+  const d = row.__date || &quot;&quot;;
+  if(!d) return false;
+
+  if(calendarState.mode === &quot;month&quot;){
+    return d.slice(0,7) === calendarState.selectedDate.slice(0,7);
+  }
+  return d === calendarState.selectedDate;
+}
+
+function rowPassFilters(row){
+  for(const field of CONFIG.FILTERS){
+    const v = filterState[field];
+    if(!v) continue;
+    const cell = row[field];
+    const s = String((cell &amp;&amp; cell.v !== undefined) ? cell.v : (cell &amp;&amp; cell.f !== undefined) ? cell.f : (cell ?? &quot;&quot;)).trim();
+    if(s !== v) return false;
+  }
+  return true;
+}
+
+function applyAndRender(){
+  // Apply calendar + selects
+  VIEW_ROWS = RAW_ROWS.filter(r =&gt; calendarPass(r)).filter(r =&gt; rowPassFilters(r));
+
+  // Sort: red first, then date desc, time asc, employee asc (based on given sample)
+  VIEW_ROWS.sort((a,b) =&gt; {
+    // red first =&gt; bad before good
+    if(a.__status !== b.__status){
+      return (a.__status === &quot;bad&quot;) ? -1 : 1;
+    }
+    // date desc
+    if(a.__date !== b.__date){
+      return (a.__date &lt; b.__date) ? 1 : -1;
+    }
+    // time asc
+    const at = timeToMinutes(a.__time) ?? 99999;
+    const bt = timeToMinutes(b.__time) ?? 99999;
+    if(at !== bt) return at - bt;
+
+    const ae = String((a[&quot;employee_name&quot;]?.v ?? a[&quot;employee_name&quot;] ?? &quot;&quot;)).trim();
+    const be = String((b[&quot;employee_name&quot;]?.v ?? b[&quot;employee_name&quot;] ?? &quot;&quot;)).trim();
+    return ae.localeCompare(be, &quot;ru&quot;);
+  });
+
+  renderTable();
+  renderKpis();
+  renderOpenStatsForSelected();
+  setStatus(`Загружено: ${RAW_ROWS.length} строк • В выборке: ${VIEW_ROWS.length} • Фильтр: ${calendarFilterLabel()}`);
+}
+
+function renderTable(){
+  const tb = document.getElementById(&quot;tbody&quot;);
+  tb.innerHTML = &quot;&quot;;
+  for(const r of VIEW_ROWS){
+    const tr = document.createElement(&quot;tr&quot;);
+    CONFIG.COLUMN_ORDER.forEach(label =&gt; {
+      const td = document.createElement(&quot;td&quot;);
+
+      if(label === &quot;Статус&quot;){
+        const dot = document.createElement(&quot;span&quot;);
+        dot.className = &quot;status-dot &quot; + (r.__status === &quot;good&quot; ? &quot;good&quot; : (r.__status === &quot;skip&quot; ? &quot;skip&quot; : &quot;bad&quot;));
+        td.appendChild(dot);
+      }else{
+        // find the field by label mapping
+        const field = Object.keys(CONFIG.COLUMNS_MAP).find(k =&gt; CONFIG.COLUMNS_MAP[k] === label) || null;
+
+        let text = &quot;&quot;;
+        if(field){
+          if(field === CONFIG.DATE_FIELD){
+            text = r.__date || &quot;&quot;;
+          }else if(field === CONFIG.TIME_FIELD){
+            text = r.__time || &quot;&quot;;
+          }else{
+            const cell = r[field];
+            text = String((cell &amp;&amp; cell.f !== undefined) ? cell.f : (cell &amp;&amp; cell.v !== undefined) ? cell.v : (cell ?? &quot;&quot;)).trim();
+          }
+        }else{
+          // fallback: if label equals raw field
+          const cell = r[label];
+          text = String((cell &amp;&amp; cell.f !== undefined) ? cell.f : (cell &amp;&amp; cell.v !== undefined) ? cell.v : (cell ?? &quot;&quot;)).trim();
+        }
+        td.textContent = text || &quot;&quot;;
+      }
+
+      tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  }
+
+  document.getElementById(&quot;footnote&quot;).textContent =
+    `Источник: Google Sheets (GViz JSONP). Плановое время: ${CONFIG.PLAN_TIME}.`;
+}
+
+function renderKpis(){
+  const total = VIEW_ROWS.length;
+  const withTime = VIEW_ROWS.filter(r =&gt; !!r.__time).length;
+  const late = VIEW_ROWS.filter(r =&gt; r.__status === &quot;bad&quot;).length; // &quot;skip&quot; (2 смена) не считаем опозданием
+
+  for(const name of CONFIG.KPIS){
+    const el = document.querySelector(`[data-kpi=&quot;${cssEscape(name)}&quot;]`);
+    if(!el) continue;
+    let val = &quot;—&quot;;
+    if(name === &quot;Строк в выборке&quot;) val = total;
+    if(name === &quot;С отметкой времени&quot;) val = withTime;
+    if(name === &quot;Опоздали&quot;) val = late;
+    el.textContent = String(val);
+  }
+}
+
+
+
+function renderOpenStatsForSelected(){
+  // По умолчанию — сегодня, но меняется при выборе дня в календаре
+  const iso = calendarState.selectedDate || toISODate(new Date());
+  renderOpenStatsForDate(iso);
+}
+
+function renderOpenStatsForDate(iso){
+  const cut = timeToMinutes(CONFIG.SECOND_SHIFT_CUTOFF);
+  const pmin = timeToMinutes(CONFIG.PLAN_TIME);
+
+  // строки выбранного дня, где есть время
+  const dayRows = RAW_ROWS.filter(r =&gt; r.__date === iso &amp;&amp; !!r.__time);
+
+  // 2 смена: после cut (&gt;= 12:00)
+  const afterNoon = (cut == null) ? 0 : dayRows.filter(r =&gt; (timeToMinutes(r.__time) ?? 99999) &gt;= cut).length;
+
+  // В расчёт &quot;вовремя/не вовремя&quot; берём только до cut
+  const dayRowsInCalc = (cut == null) ? dayRows : dayRows.filter(r =&gt; (timeToMinutes(r.__time) ?? 99999) &lt; cut);
+
+  const totalOpened = dayRowsInCalc.length;
+  const onTime = dayRowsInCalc.filter(r =&gt; (timeToMinutes(r.__time) ?? 99999) &lt;= (pmin ?? 0)).length;
+  const late = dayRowsInCalc.filter(r =&gt; (timeToMinutes(r.__time) ?? 99999) &gt; (pmin ?? 0)).length;
+
+  const totalEl = document.getElementById(&quot;selectedOpenedTotal&quot;);
+  const onTimeEl = document.getElementById(&quot;selectedOpenedOnTime&quot;);
+  const lateEl = document.getElementById(&quot;selectedOpenedLate&quot;);
+  const labelEl = document.getElementById(&quot;selectedOpenLabel&quot;);
+  const planInline = document.getElementById(&quot;planTimeInline&quot;);
+  const afterEl = document.getElementById(&quot;openedAfterNoon&quot;);
+
+  if(totalEl) totalEl.textContent = String(totalOpened);
+  if(onTimeEl) onTimeEl.textContent = String(onTime);
+  if(lateEl) lateEl.textContent = String(late);
+  if(labelEl) labelEl.textContent = iso;
+  if(planInline) planInline.textContent = CONFIG.PLAN_TIME;
+  if(afterEl) afterEl.textContent = String(afterNoon);
+
+  // Bars + percents
+  const pctOn = totalOpened ? Math.round((onTime / totalOpened) * 100) : 0;
+  const pctLt = totalOpened ? Math.round((late / totalOpened) * 100) : 0;
+
+  const barOn = document.getElementById(&quot;barOnTime&quot;);
+  const barLt = document.getElementById(&quot;barLate&quot;);
+  const pctOnEl = document.getElementById(&quot;pctOnTime&quot;);
+  const pctLtEl = document.getElementById(&quot;pctLate&quot;);
+
+  if(barOn) barOn.style.width = pctOn + &quot;%&quot;;
+  if(barLt) barLt.style.width = pctLt + &quot;%&quot;;
+  if(pctOnEl) pctOnEl.textContent = totalOpened ? (pctOn + &quot;% от открывших (до 12:00)&quot;) : &quot;Нет открытий до 12:00&quot;;
+  if(pctLtEl) pctLtEl.textContent = totalOpened ? (pctLt + &quot;% от открывших (до 12:00)&quot;) : &quot;Нет открытий до 12:00&quot;;
+
+  // Ring: two arcs on the same circle using dasharray. Circle length = 2*pi*r.
+  const r = 46;
+  const circ = 2 * Math.PI * r;
+
+  const ringOn = document.querySelector(&quot;.ring-on&quot;);
+  const ringLate = document.querySelector(&quot;.ring-late&quot;);
+
+  const onLen = totalOpened ? (onTime / totalOpened) * circ : 0;
+  const lateLen = totalOpened ? (late / totalOpened) * circ : 0;
+
+  if(ringOn){
+    ringOn.style.strokeDasharray = `${onLen} ${circ - onLen}`;
+    ringOn.style.strokeoffset = &quot;0&quot;;
+    ringOn.style.strokeDashoffset = &quot;0&quot;;
+  }
+  if(ringLate){
+    ringLate.style.strokeDasharray = `${lateLen} ${circ - lateLen}`;
+    ringLate.style.strokeDashoffset = String(-onLen);
+  }
+}
+
+
+/** ============================
+ *  Utils: escaping
+ *  ============================ */
+function escapeHtml(s){
+  return String(s).replace(/[&amp;&lt;&gt;&quot;&#39;]/g, c =&gt; ({&#39;&amp;&#39;:&#39;&amp;amp;&#39;,&#39;&lt;&#39;:&#39;&amp;lt;&#39;,&#39;&gt;&#39;:&#39;&amp;gt;&#39;,&#39;&quot;&#39;:&#39;&amp;quot;&#39;,&quot;&#39;&quot;:&#39;&amp;#39;&#39;}[c]));
+}
+function cssEscape(s){
+  // basic for attribute query, safe enough here
+  return String(s).replace(/&quot;/g, &#39;\\&quot;&#39;);
+}
+
+/** ============================
+ *  Actions
+ *  ============================ */
+document.getElementById(&quot;companyName&quot;).textContent = CONFIG.COMPANY_NAME;
+
+// КНОПКИ НАЗАД НА ГЛАВНУЮ
+const goHome = () =&gt; {
+  // HOME_URL должен вести на главную страницу лаунчера
+  const url = (CONFIG.HOME_URL || &#39;/&#39;).trim() || &#39;/&#39;;
+  window.location.href = url;
+};
+const btnBackTop = document.getElementById(&#39;btnBackTop&#39;);
+if(btnBackTop) btnBackTop.addEventListener(&#39;click&#39;, goHome);
+const btnBackBottom = document.getElementById(&#39;btnBackBottom&#39;);
+if(btnBackBottom) btnBackBottom.addEventListener(&#39;click&#39;, goHome);
+
+
+document.getElementById(&quot;btnRefresh&quot;).addEventListener(&quot;click&quot;, () =&gt; loadData());
+
+document.getElementById(&quot;btnReset&quot;).addEventListener(&quot;click&quot;, () =&gt; {
+  // reset selects
+  for(const k of Object.keys(filterState)) filterState[k] = &quot;&quot;;
+  document.querySelectorAll(&quot;#filters select&quot;).forEach(sel =&gt; sel.value = &quot;&quot;);
+
+  // reset calendar to today (if configured)
+  const now = new Date();
+  calendarState.viewYear = now.getFullYear();
+  calendarState.viewMonth = now.getMonth();
+  calendarState.selectedDate = (CONFIG.CALENDAR_DEFAULT === &quot;today&quot;) ? toISODate(now) : null;
+
+  // reset mode to default
+  setCalendarMode(CONFIG.CALENDAR_MODE_DEFAULT || &quot;day&quot;, false);
+
+  renderCalendar();
+  refreshFilterOptions();
+  applyAndRender();
+});
+
+document.getElementById(&quot;btnPrev&quot;).addEventListener(&quot;click&quot;, () =&gt; {
+  const d = new Date(calendarState.viewYear, calendarState.viewMonth, 1);
+  d.setMonth(d.getMonth()-1);
+  calendarState.viewYear = d.getFullYear();
+  calendarState.viewMonth = d.getMonth();
+  renderCalendar();
+});
+
+document.getElementById(&quot;btnNext&quot;).addEventListener(&quot;click&quot;, () =&gt; {
+  const d = new Date(calendarState.viewYear, calendarState.viewMonth, 1);
+  d.setMonth(d.getMonth()+1);
+  calendarState.viewYear = d.getFullYear();
+  calendarState.viewMonth = d.getMonth();
+  renderCalendar();
+});
+
+document.getElementById(&quot;btnToday&quot;).addEventListener(&quot;click&quot;, () =&gt; {
+  const now = new Date();
+  calendarState.viewYear = now.getFullYear();
+  calendarState.viewMonth = now.getMonth();
+  calendarState.selectedDate = toISODate(now);
+  renderCalendar();
+  refreshFilterOptions();
+  applyAndRender();
+});
+
+document.getElementById(&quot;modeDay&quot;).addEventListener(&quot;click&quot;, () =&gt; setCalendarMode(&quot;day&quot;));
+document.getElementById(&quot;modeMonth&quot;).addEventListener(&quot;click&quot;, () =&gt; setCalendarMode(&quot;month&quot;));
+
+// initial load
+loadData();
+&lt;/script&gt;
+
+
+&lt;/body&gt;&lt;/html&gt;"></iframe>
+        </div>
+      </main>
     </div>
-  </footer>
+  </div>
+
+  <script>
+    (function () {
+      const wrap = document.getElementById('frameWrap');
+      const btn = document.getElementById('toggleFullscreenBtn');
+      const body = document.body;
+      let expanded = false;
+
+      function setExpanded(nextState) {
+        expanded = !!nextState;
+        wrap.classList.toggle('is-fullscreen', expanded);
+        body.classList.toggle('fullscreen-mode', expanded);
+        btn.textContent = expanded ? 'Свернуть' : 'Развернуть';
+      }
+
+      btn.addEventListener('click', function () {
+        setExpanded(!expanded);
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && expanded) {
+          setExpanded(false);
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
