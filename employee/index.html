@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Сотрудники — Портал ПВЗ</title>
+
+  <!-- STYLES -->
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/pages.css" />
+
+  <!-- SCRIPTS -->
+  <script defer src="../assets/js/auth.js"></script>
+  <script defer src="../assets/js/navigation.js"></script>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-shell">
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <div>
+          <div class="brand-title">PVZ Portal</div>
+          <div class="brand-subtitle">Внутренний портал</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-ghost" onclick="logout()">Выйти</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero hero-compact">
+      <div class="hero-bg hero-bg-1"></div>
+      <div class="hero-bg hero-bg-2"></div>
+
+      <div class="hero-inner">
+        <!-- NAVIGATION -->
+        <nav class="breadcrumb" aria-label="Навигация"><span class="crumb current">Сотрудники</span></nav>
+
+        <!-- PAGE TITLE -->
+        <div class="hero-copy">
+          <div class="eyebrow">Раздел сотрудников</div>
+          <h1>Сотрудники</h1>
+          <p class="lead">Навигация по основным рабочим разделам для сотрудников.</p>
+          <div class="hero-meta">Выберите нужный блок</div>
+        </div>
+
+        <!-- BACK BUTTONS -->
+        <div class="hero-actions"><a class="btn btn-secondary" href="../index.html">Назад</a><button class="btn btn-ghost" onclick="logout()">Выйти</button></div>
+      </div>
+    </section>
+
+    <section class="content-wrap">
+      
+        <!-- MAIN ACTIONS / CARDS -->
+        <section class="card-grid">
+          
+        <!-- CARD -->
+        <a class="card-link" href="open-shift.html">
+          <article class="card">
+            <div class="card-top">
+              <h3>Открытие смены</h3>
+              <span class="card-arrow">→</span>
+            </div>
+            <p>Переход к дашборду открытия смены</p>
+          </article>
+        </a>
+        
+
+        <!-- CARD -->
+        <a class="card-link" href="timesheet.html">
+          <article class="card">
+            <div class="card-top">
+              <h3>Табель учета времени</h3>
+              <span class="card-arrow">→</span>
+            </div>
+            <p>Переход к табелю учета времени</p>
+          </article>
+        </a>
+        
+
+        <!-- CARD -->
+        <a class="card-link" href="standards.html">
+          <article class="card">
+            <div class="card-top">
+              <h3>Стандарты работы</h3>
+              <span class="card-arrow">→</span>
+            </div>
+            <p>Инструкции и стандарты сотрудников</p>
+          </article>
+        </a>
+        
+        </section>
+        
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-shell">
+      <div>Внутренний портал ПВЗ</div>
+      <div>Статический HTML/CSS/JS</div>
+    </div>
+  </footer>
+</body>
+</html>

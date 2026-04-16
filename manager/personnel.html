@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Персонал — Портал ПВЗ</title>
+
+  <!-- STYLES -->
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/pages.css" />
+
+  <!-- SCRIPTS -->
+  <script defer src="../assets/js/auth.js"></script>
+  <script defer src="../assets/js/navigation.js"></script>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-shell">
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <div>
+          <div class="brand-title">PVZ Portal</div>
+          <div class="brand-subtitle">Внутренний портал</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-ghost" onclick="logout()">Выйти</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero hero-compact">
+      <div class="hero-bg hero-bg-1"></div>
+      <div class="hero-bg hero-bg-2"></div>
+
+      <div class="hero-inner">
+        <!-- NAVIGATION -->
+        <nav class="breadcrumb" aria-label="Навигация"><a class="crumb" href="../home.html">Главная</a><span class="dot">•</span><a class="crumb" href="../manager/index.html">Управляющие</a><span class="dot">•</span><a class="crumb" href="standards-work.html">Стандарты и работы</a><span class="dot">•</span><span class="crumb current">Персонал</span></nav>
+
+        <!-- PAGE TITLE -->
+        <div class="hero-copy">
+          <div class="eyebrow">Раздел управляющих</div>
+          <h1>Персонал</h1>
+          <p class="lead">Навигация по кадровым стандартам и действиям.</p>
+          <div class="hero-meta">Выберите нужный блок</div>
+        </div>
+
+        <!-- BACK BUTTONS -->
+        <div class="hero-actions"><a class="btn btn-secondary" href="javascript:history.back()">Назад</a><a class="btn btn-secondary" href="../home.html">На главную</a><button class="btn btn-ghost" onclick="logout()">Выйти</button></div>
+      </div>
+    </section>
+
+    <section class="content-wrap">
+      
+        <!-- MAIN ACTIONS / CARDS -->
+        <section class="card-grid">
+          
+        <!-- CARD -->
+        <a class="card-link" href="hiring.html">
+          <article class="card">
+            <div class="card-top">
+              <h3>Прием</h3>
+              <span class="card-arrow">→</span>
+            </div>
+            <p>Материалы по приему сотрудников</p>
+          </article>
+        </a>
+        
+
+        <!-- CARD -->
+        <a class="card-link" href="dismissal.html">
+          <article class="card">
+            <div class="card-top">
+              <h3>Увольнение</h3>
+              <span class="card-arrow">→</span>
+            </div>
+            <p>Материалы по увольнению сотрудников</p>
+          </article>
+        </a>
+        
+
+        <!-- CARD -->
+        <a class="card-link" href="theft.html">
+          <article class="card">
+            <div class="card-top">
+              <h3>Кража</h3>
+              <span class="card-arrow">→</span>
+            </div>
+            <p>Порядок действий при краже</p>
+          </article>
+        </a>
+        
+
+        <!-- CARD -->
+        <a class="card-link" href="payroll.html">
+          <article class="card">
+            <div class="card-top">
+              <h3>Расчет ЗП</h3>
+              <span class="card-arrow">→</span>
+            </div>
+            <p>Порядок расчета заработной платы</p>
+          </article>
+        </a>
+        
+        </section>
+        
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-shell">
+      <div>Внутренний портал ПВЗ</div>
+      <div>Статический HTML/CSS/JS</div>
+    </div>
+  </footer>
+</body>
+</html>

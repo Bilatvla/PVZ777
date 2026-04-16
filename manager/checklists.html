@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Чек-листы проверки — Портал ПВЗ</title>
+
+  <!-- STYLES -->
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/pages.css" />
+
+  <!-- SCRIPTS -->
+  <script defer src="../assets/js/auth.js"></script>
+  <script defer src="../assets/js/navigation.js"></script>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-shell">
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <div>
+          <div class="brand-title">PVZ Portal</div>
+          <div class="brand-subtitle">Внутренний портал</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-ghost" onclick="logout()">Выйти</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div class="hero-bg hero-bg-1"></div>
+      <div class="hero-bg hero-bg-2"></div>
+
+      <div class="hero-inner">
+        <!-- NAVIGATION -->
+        <nav class="breadcrumb" aria-label="Навигация"><a class="crumb" href="../home.html">Главная</a><span class="dot">•</span><a class="crumb" href="../manager/index.html">Управляющие</a><span class="dot">•</span><span class="crumb current">Чек-листы проверки</span></nav>
+
+        <!-- PAGE TITLE -->
+        <div class="hero-copy">
+          <div class="eyebrow">Раздел управляющих</div>
+          <h1>Чек-листы проверки</h1>
+          <p class="lead">Страница-переход к чек-листам проверки.</p>
+          <div class="hero-meta">Переход в подключённый инструмент</div>
+        </div>
+
+        <!-- BACK BUTTONS -->
+        <div class="hero-actions"><a class="btn btn-secondary" href="javascript:history.back()">Назад</a><a class="btn btn-secondary" href="../home.html">На главную</a><button class="btn btn-ghost" onclick="logout()">Выйти</button></div>
+      </div>
+    </section>
+
+    <section class="content-wrap">
+      
+        <!-- EXTERNAL LINKS (дашборды) -->
+        <section class="surface action-surface">
+          <div class="inline-note">Внешний инструмент</div>
+          <h2>Переход во внешний ресурс</h2>
+          <p>Ниже размещена кнопка перехода. Ссылку можно легко заменить прямо в коде страницы.</p>
+
+          <!-- LINK: вставьте ссылку на внешний дашборд / форму / отчёт -->
+          <a class="btn btn-primary" href="#" target="_blank" rel="noopener noreferrer">Открыть чек-листы</a>
+
+          <div class="dev-note">
+            <strong>Подсказка для редактирования:</strong> найдите комментарий
+            <code>&lt;!-- LINK: вставьте ссылку... --&gt;</code> в коде этой страницы.
+          </div>
+        </section>
+        
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-shell">
+      <div>Внутренний портал ПВЗ</div>
+      <div>Статический HTML/CSS/JS</div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Открытие смены — Портал ПВЗ</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/pages.css" />
+  <script defer src="../assets/js/auth.js"></script>
+  <script defer src="../assets/js/navigation.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-shell">
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <div>
+          <div class="brand-title">PVZ Portal</div>
+          <div class="brand-subtitle">Внутренний портал</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-ghost" onclick="logout()">Выйти</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero hero-compact">
+      <div class="hero-bg hero-bg-1"></div>
+      <div class="hero-bg hero-bg-2"></div>
+      <div class="hero-inner">
+        <nav class="breadcrumb" aria-label="Навигация"><a class="crumb" href="../home.html">Главная</a><span class="dot">•</span><a class="crumb" href="index.html">Управляющие</a><span class="dot">•</span><a class="crumb" href="staff-control.html">Контроль сотрудников</a><span class="dot">•</span><span class="crumb current">Открытие смены</span></nav>
+        <div class="hero-copy">
+          <div class="eyebrow">Предпросмотр Google-ссылки</div>
+          <h1>Открытие смены</h1>
+          <p class="lead">На этой странице сразу открывается окно предпросмотра. Для запуска рабочей версии замените две ссылки в коде: одну для preview, вторую для открытия отдельно.</p>
+          <div class="hero-meta">Страница готова для быстрого копирования</div>
+        </div>
+        <div class="hero-actions">
+          <a class="btn btn-secondary btn-small" href="staff-control.html">Назад</a>
+          <a class="btn btn-secondary btn-small" href="../home.html">На главную</a>
+          <button class="btn btn-ghost btn-small" onclick="logout()">Выйти</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-wrap">
+      <section class="surface action-surface preview-surface">
+        <div class="preview-toolbar">
+          <div>
+            <div class="inline-note">Предпросмотр</div>
+            <h2 class="preview-title">Окно документа</h2>
+            <p class="preview-subtitle">Вставьте сюда Google preview-ссылку, и документ будет открываться прямо на странице.</p>
+          </div>
+          <a class="btn btn-primary btn-small" href="https://docs.google.com/" target="_blank" rel="noopener noreferrer">Открыть отдельно</a>
+        </div>
+        <div class="preview-shell">
+          <iframe class="preview-frame" src="https://docs.google.com/" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        </div>
+        <div class="dev-note"><strong>Где менять ссылки:</strong> найдите в коде этой страницы <code>href="https://docs.google.com/"</code> и <code>src="https://docs.google.com/"</code>, затем замените на свои рабочие адреса.</div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-shell">
+      <div>Внутренний портал ПВЗ</div>
+      <div>Страница с предпросмотром</div>
+    </div>
+  </footer>
+</body>
+</html>

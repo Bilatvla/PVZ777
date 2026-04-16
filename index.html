@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Вход в портал — Портал ПВЗ</title>
+
+  <!-- STYLES -->
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/pages.css" />
+
+  <!-- SCRIPTS -->
+  <script defer src="assets/js/auth.js"></script>
+  <script defer src="assets/js/navigation.js"></script>
+</head>
+<body class="login-page">
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-shell">
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <div>
+          <div class="brand-title">PVZ Portal</div>
+          <div class="brand-subtitle">Внутренний портал</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div class="hero-bg hero-bg-1"></div>
+      <div class="hero-bg hero-bg-2"></div>
+
+      <div class="hero-inner">
+        <!-- NAVIGATION -->
+        
+
+        <!-- PAGE TITLE -->
+        <div class="hero-copy">
+          <div class="eyebrow">Вход в систему</div>
+          <h1>Вход в портал</h1>
+          <p class="lead">Введите пароль, чтобы открыть внутренний портал ПВЗ.</p>
+          <div class="hero-meta">Простой password gate</div>
+        </div>
+
+        <!-- BACK BUTTONS -->
+        
+      </div>
+    </section>
+
+    <section class="content-wrap">
+      
+        <!-- LOGIN FORM -->
+        <section class="surface login-surface">
+          <div class="login-box">
+            <div class="eyebrow">Защищённый доступ</div>
+            <h1>Вход в портал</h1>
+            <p class="lead">Введите пароль, чтобы открыть внутренний портал ПВЗ.</p>
+
+            <label class="field-label" for="password">Пароль</label>
+            <input id="password" class="input" type="password" placeholder="Введите пароль" />
+            <button class="btn btn-primary btn-full" onclick="handleLogin()">Войти</button>
+            <p id="error-message" class="error-text" aria-live="polite"></p>
+          </div>
+        </section>
+        
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-shell">
+      <div>Внутренний портал ПВЗ</div>
+      <div>Статический HTML/CSS/JS</div>
+    </div>
+  </footer>
+</body>
+</html>
