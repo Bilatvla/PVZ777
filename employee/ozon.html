@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Видеоинструкции</title>
+  <style>
+    :root{
+      --bg:#07111f;
+      --bg2:#0b1830;
+      --panel:rgba(10,19,36,.94);
+      --panel2:rgba(12,24,48,.98);
+      --text:#e8f0ff;
+      --muted:#9fb0d0;
+      --line:rgba(126,163,255,.18);
+      --accent:#5cc8ff;
+      --accent2:#6dd3ff;
+      --shadow:0 18px 50px rgba(0,0,0,.35);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      color:var(--text);
+      font:16px/1.5 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:
+        radial-gradient(900px 500px at -5% 10%, rgba(31,127,255,.20), transparent 55%),
+        radial-gradient(900px 500px at 105% 80%, rgba(92,200,255,.18), transparent 55%),
+        linear-gradient(180deg, #06101c 0%, #081224 45%, #07101b 100%);
+      min-height:100vh;
+    }
+    body.modal-open{overflow:hidden}
+    .page{max-width:1600px;margin:0 auto;padding:18px}
+    .shell{display:grid;grid-template-columns:340px 1fr;gap:18px;align-items:start}
+    .side,.main{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+    .side{padding:16px;position:sticky;top:16px}
+    .breadcrumbs{display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:var(--muted);font-size:14px;margin-bottom:10px}
+    .breadcrumbs a{color:var(--text);text-decoration:none}
+    .page-title{margin:0 0 10px;font-size:30px;line-height:1.12}
+    .page-intro{margin:0 0 14px;color:var(--muted)}
+    .actions{display:flex;flex-wrap:wrap;gap:10px}
+    .mini-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 16px;border-radius:16px;background:#12213d;border:1px solid rgba(126,163,255,.18);color:var(--text);text-decoration:none;font-weight:700}
+    .main{padding:16px}
+    .content-stack{display:grid;gap:16px}
+    .content-block{border:1px solid rgba(126,163,255,.16);border-radius:20px;padding:16px;background:rgba(255,255,255,.02)}
+    .block-header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}
+    .block-index{color:var(--muted);font-size:13px;margin-bottom:6px}
+    .content-block h2{margin:0;font-size:24px;line-height:1.15}
+    .video-caption{font-size:14px;color:var(--muted);margin-bottom:10px}
+    .video-shell,.embed-shell,.external-video-card{background:#08111f;border:1px solid rgba(126,163,255,.12);border-radius:18px;overflow:hidden}
+    .video-shell video,.video-shell iframe,.embed-shell iframe{display:block;width:100%;aspect-ratio:16/9;border:0;background:#000}
+    .embed-shell iframe{min-height:420px}
+    .external-video-card{padding:24px}
+    .external-video-title{font-size:18px;font-weight:700;margin-bottom:8px}
+    .open-link-btn,.pdf-link{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:12px 16px;border-radius:14px;background:#12213d;border:1px solid rgba(126,163,255,.18);color:var(--text);text-decoration:none;font-weight:700}
+    .instruction-box{margin-top:14px;padding:16px 18px;border-radius:18px;background:rgba(8,17,31,.56);border:1px solid rgba(126,163,255,.12)}
+    .media-section{margin-top:16px}
+    .section-mini-title{font-size:14px;font-weight:700;color:var(--muted);margin-bottom:10px}
+    .image-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .image-card{padding:0;border:0;background:#08111f;border-radius:18px;overflow:hidden;cursor:pointer;display:block}
+    .image-card img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#0a1120}
+    .pdf-list{display:flex;flex-wrap:wrap;gap:10px}
+    .empty-card{padding:20px;border-radius:18px;background:#08111f;border:1px dashed rgba(126,163,255,.18);color:var(--muted)}
+    .image-modal{position:fixed;inset:0;background:rgba(2,7,16,.84);display:none;align-items:center;justify-content:center;padding:22px;z-index:9999}
+    .image-modal.is-open{display:flex}
+    .image-modal-box{position:relative;max-width:min(96vw,1500px);max-height:92vh;width:100%;display:flex;align-items:center;justify-content:center}
+    .image-modal img{max-width:100%;max-height:92vh;border-radius:18px;background:#091221}
+    .image-close{position:absolute;top:-10px;right:-10px;min-width:44px;min-height:44px;border:0;border-radius:999px;background:#12213d;color:#fff;font-size:26px;cursor:pointer}
+    @media (max-width:1100px){
+      .shell{grid-template-columns:1fr}
+      .side{position:static}
+      .page-title{font-size:24px}
+    }
+    @media (max-width:700px){
+      .page{padding:12px}
+      .side,.main{border-radius:18px}
+      .content-block h2{font-size:22px}
+      .image-grid{grid-template-columns:1fr}
+      .embed-shell iframe{min-height:260px}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="shell">
+      <aside class="side">
+        <nav class="breadcrumbs">
+          <a href="../home.html">Главная</a>
+          <span>/</span>
+          <a href="./index.html">Сотрудники</a>
+          <span>/</span>
+          <span>Видеоинструкции</span>
+        </nav>
+        <h1 class="page-title">Видеоинструкции</h1>
+        <p class="page-intro">Ниже собраны видеоматериалы, инструкции и дополнительные файлы.</p>
+        <div class="actions">
+          <a class="mini-btn" href="./index.html">← Назад</a>
+          <a class="mini-btn" href="../home.html">⌂ На главную</a>
+        </div>
+      </aside>
+
+      <main class="main">
+        <div class="content-stack">
+          
+        <section class="content-block">
+          <div class="block-header">
+            <div>
+              <div class="block-index">Блок 1</div>
+              <h2>Ozon</h2>
+            </div>
+          </div>
+
+          <div class="video-caption">Видео</div>
+          <div class="video-shell embed-shell"><iframe
+        width="720"
+        height="405"
+        src="https://rutube.ru/play/embed/6d98920338314027d61ba0dd8d4c2224/?p=7rCqoIXXSbVRAIjY8DzuOA"
+        style="border: none;"
+        allow="clipboard-write; autoplay"
+        allowFullScreen
+      ></iframe></div>
+
+          <div class="instruction-box">
+            📋 Инструкция: Выдача заказов Ozon (ПВЗ)<br>1. Вход в систему<br>1.	Открыть систему Турбо ПВЗ Ozon <br>2.	В верхнем левом меню выбрать: <br>o	«Выдача заказов» <br>________________________________________<br>2. Идентификация клиента<br>Когда приходит клиент:<br>Варианты:<br>•	📦 Штрих-код (основной вариант) <br>•	📝 Номер заказа (с листа) <br>Действие:<br>•	Сканируем штрих-код<br>или <br>•	Вводим номер заказа вручную <br>________________________________________<br>3. Получение информации по заказу<br>После сканирования система показывает:<br>•	номер ячейки <br>•	количество товаров <br>•	статус товаров: <br>o	оплачены <br>o	требуют оплаты <br>📌 Важно:<br>Если требуется оплата — клиента не отпускать до подтверждения оплаты <br>________________________________________<br>4. Подбор товаров<br>1.	Идём на склад <br>2.	Берём товары из указанной ячейки <br>________________________________________<br>5. Добавление товаров к выдаче<br>Для каждого товара:<br>1.	Сканируем товар <br>2.	После сканирования: <br>o	товар загорается зелёным <br>________________________________________<br>6. Если товар не сканируется<br>Если:<br>•	повреждён штрих-код <br>•	товар не читается <br>➡️ Действие:<br>•	вручную изменить статус: <br>o	с «На хранении» <br>o	на «Добавить к выдаче» <br>________________________________________<br>7. Проверка товара клиентом<br>Сценарии:<br>✅ Клиент проверяет товар:<br>•	нажимаем «Проверка» <br>❌ Клиент отказывается (не вскрывая):<br>•	выбираем: <br>o	«Отказ клиента без проверки» <br>________________________________________<br>8. Обработка отказов<br>Если есть отказ:<br>1.	Нажать «Проверить» <br>2.	Указать причину отказа: <br>o	брак <br>o	не тот товар <br>o	некомплект <br>o	другое <br>📌 Это обязательно фиксируется в системе <br>________________________________________<br>9. Контроль состава заказа<br>Система показывает:<br>•	общее количество товаров <br>•	количество к выдаче <br>•	количество удалённых <br>📌 Пример:<br>•	всего: 6 <br>•	к выдаче: 5 <br>•	отказ: 1 <br>________________________________________<br>10. Переход к выдаче<br>Если всё корректно:<br>➡️ Нажать «Продолжить»<br>________________________________________<br>11. Выдача пакетов<br>Обязательно спросить клиента:<br>👉 «Сколько пакетов вам нужно?»<br>Типы пакетов:<br>•	М — средний <br>•	L — большой <br>📌 Ограничение:<br>•	нельзя выдать больше пакетов, чем разрешает система <br>________________________________________<br>12. Финальная проверка и оплата<br>1.	Озвучить сумму клиенту <br>2.	Подтвердить: <br>o	что клиент забирает всё <br>3.	Нажать: <br>o	«Провести оплату» <br>________________________________________<br>13. Завершение выдачи<br>✅ Если оплата прошла:<br>•	система показывает успешную оплату <br>•	клиента можно отпускать <br>❗ Если система зависла:<br>•	клиент остаётся на ПВЗ <br>•	до подтверждения оплаты <br><br><br>Выдача заказа Ozon<br><br>№	Шаг	Действие	Детали	Ответственный<br>1	Вход	Открыть раздел	«Выдача заказов»	Сотрудник<br>2	Идентификация	Найти заказ	Штрих-код или номер	Сотрудник<br>3	Проверка	Проверить статус	Оплачен / требуется оплата	Сотрудник<br>4	Склад	Забрать товар	По ячейке	Сотрудник<br>5	Сканирование	Добавить к выдаче	Скан товара	Сотрудник<br>6	Ошибка сканирования	Изменить статус	Вручную	Сотрудник<br>7	Проверка клиентом	Подтвердить проверку	Если вскрывает	Сотрудник<br>8	Отказ	Зафиксировать отказ	Указать причину	Сотрудник<br>9	Контроль	Проверить состав	Кол-во товаров	Сотрудник<br>10	Переход	Нажать «Продолжить»	Если всё ок	Сотрудник<br>11	Пакеты	Уточнить пакеты	М / L	Сотрудник<br>12	Оплата	Провести оплату	Подтвердить сумму	Сотрудник<br>13	Завершение	Отпустить клиента	Только после оплаты	Сотрудник<br><br><br><br><br><br><br><br><br>📌 Коротко (чек-лист)<br>•	Нашёл заказ <br>•	Проверил оплату <br>•	Забрал товар <br>•	Отсканировал <br>•	Дал проверить <br>•	Зафиксировал отказы <br>•	Уточнил пакеты <br>•	Провёл оплату <br>•	Убедился в успешной оплате <br>________________________________________<br>⚠️ Критические ошибки (важно для стандарта)<br>•	❌ Отпустить клиента без оплаты <br>•	❌ Не зафиксировать отказ <br>•	❌ Не проверить товар <br>•	❌ Игнорировать зависание системы<br><br>
+          </div>
+
+          
+          
+        <div class="media-section">
+          <div class="section-mini-title">Файлы PDF</div>
+          <div class="pdf-list">
+            
+              <a class="pdf-link" href="https://disk.yandex.ru/i/u40UpLREuTXZSA" target="_blank" rel="noopener">PDF 1</a>
+          </div>
+        </div>
+        </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="image-modal" id="imageModal" onclick="if(event.target===this) closeImageModal()">
+    <div class="image-modal-box">
+      <button class="image-close" type="button" onclick="closeImageModal()">×</button>
+      <img id="modalImage" alt="Увеличенное изображение" />
+    </div>
+  </div>
+
+  <script>
+    function openImageModal(src){
+      document.getElementById('modalImage').src = src;
+      document.getElementById('imageModal').classList.add('is-open');
+      document.body.classList.add('modal-open');
+    }
+    function closeImageModal(){
+      document.getElementById('imageModal').classList.remove('is-open');
+      document.body.classList.remove('modal-open');
+    }
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeImageModal();
+    });
+  </script>
+</body>
+</html>
