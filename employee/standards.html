@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Стандарты работы — Портал ПВЗ</title>
+  <title>Стандарты и работы — Портал ПВЗ</title>
 
   <!-- STYLES -->
   <link rel="stylesheet" href="../assets/css/style.css" />
@@ -31,34 +31,55 @@
   </header>
 
   <main class="page">
-    <section class="hero">
+    <section class="hero hero-compact">
       <div class="hero-bg hero-bg-1"></div>
       <div class="hero-bg hero-bg-2"></div>
 
       <div class="hero-inner">
         <!-- NAVIGATION -->
-        <nav class="breadcrumb" aria-label="Навигация"><a class="crumb" href="index.html">Сотрудники</a><span class="dot">•</span><span class="crumb current">Стандарты работы</span></nav>
+        <nav class="breadcrumb" aria-label="Навигация"><a class="crumb" href="../home.html">Главная</a><span class="dot">•</span><a class="crumb" href="../manager/index.html">Управляющие</a><span class="dot">•</span><span class="crumb current">Стандарты и работы</span></nav>
 
         <!-- PAGE TITLE -->
         <div class="hero-copy">
-          <div class="eyebrow">Раздел сотрудников</div>
-          <h1>Стандарты работы</h1>
-          <p class="lead">Инструкции и материалы для сотрудников.</p>
-          <div class="hero-meta">Шаблонная страница раздела</div>
+          <div class="eyebrow">Раздел управляющих</div>
+          <h1>Стандарты и работы</h1>
+          <p class="lead">Стандарты по маркетплейсам и персоналу.</p>
+          <div class="hero-meta">Выберите нужный блок</div>
         </div>
 
         <!-- BACK BUTTONS -->
-        <div class="hero-actions"><a class="btn btn-secondary" href="index.html">Назад</a><button class="btn btn-ghost" onclick="logout()">Выйти</button></div>
+        <div class="hero-actions"><a class="btn btn-secondary" href="javascript:history.back()">Назад</a><a class="btn btn-secondary" href="../home.html">На главную</a><button class="btn btn-ghost" onclick="logout()">Выйти</button></div>
       </div>
     </section>
 
     <section class="content-wrap">
       
-        <!-- PLACEHOLDER -->
-        <section class="surface action-surface">
-          <div class="inline-note">Раздел в разработке</div>
-          <h2>Контент будет добавлен</h2>
-          <p>Эта страница уже создана как отдельный URL. Сюда можно добавить текст, кнопки, инструкции или ссылки на внешние материалы.</p>
+        <!-- MAIN ACTIONS / CARDS -->
+        <section class="card-grid">
+          
+        <!-- CARD -->
+        <a class="card-link" href="marketplaces.html">
+          <article class="card">
+            <div class="card-top">
+              <h3>Маркетплейсы</h3>
+              <span class="card-arrow">→</span>
+            </div>
+            <p>WB, Ozon, Яндекс</p>
+          </article>
+        </a>
+        
+
+        <!-- CARD -->
+        <a class="card-link" href="personnel.html">
+          <article class="card">
+            <div class="card-top">
+              <h3>Персонал</h3>
+              <span class="card-arrow">→</span>
+            </div>
+            <p>Прием, увольнение, кража, расчет ЗП</p>
+          </article>
+        </a>
+        
         </section>
         
     </section>
